@@ -14,6 +14,10 @@ document.getElementById('normal_action').addEventListener('click', () => {
 
 document.getElementById('designate_delete').addEventListener('click', () => {
     const designatedURL = document.getElementById('designate').value;
+    if(designatedURL === ''){
+        alert("空白を条件に指定することはできません。");
+        return;
+    }
     chrome.tabs.query({}, tabs => {
         tabs.map((currentTab) => {
             if(currentTab.url.match(designatedURL)){
