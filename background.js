@@ -17,4 +17,6 @@ function tabCount() {
   });
 }
 
-setInterval(tabCount, 1000);
+chrome.tabs.onCreated.addListener(tabCount);
+chrome.tabs.onUpdated.addListener(tabCount);
+chrome.tabs.onRemoved.addListener(tabCount);
