@@ -40,7 +40,7 @@ chrome.tabs.query({}, tabs => {
         tabUrlCounter[domain] = (tabUrlCounter[domain] || 0) + 1;
     });
 
-    // set bitton
+    // set button
     for (let [domain, cnt] of Object.entries(tabUrlCounter)) {
         const button = document.createElement("button");
         button.id = domain;
