@@ -41,7 +41,7 @@ chrome.tabs.query({}, tabs => {
     });
 
     // set button
-    for (let [domain, cnt] of Object.entries(tabUrlCounter)) {
+    for (const [domain, cnt] of Object.entries(tabUrlCounter)) {
         const button = document.createElement("button");
         button.id = domain;
         button.innerHTML = domain + ' (' + cnt + ')';
