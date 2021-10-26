@@ -1,10 +1,10 @@
 {
     "name": "tab-killer",
     "description": "Close all duplicate tabs.",
-    "version": "0.2.1",
-    "manifest_version": 2,
+    "version": "0.2.2",
+    "manifest_version": 3,
 
-    "browser_action": {
+    "action": {
         "default_title": "tab-killer",
         "default_popup": "popup.html"
     },
