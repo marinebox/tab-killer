@@ -12,8 +12,8 @@ function tabCount() {
     for (const url in tabUrlCounter) {
       deplicatedTabNum += tabUrlCounter[url] - 1;
     };
-    
-    chrome.action.setBadgeText({ text: deplicatedTabNum.toString() });
+
+    chrome.action.setBadgeText({ text: deplicatedTabNum > 0 ? deplicatedTabNum.toString() : '' });
   });
 }
 
