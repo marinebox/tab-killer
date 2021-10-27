@@ -6,10 +6,16 @@
     </head>
     <body>
         <button id="normal_action">重複タブを削除</button>
-        <p></p>
-        URLに以下の文字列を含むタブを<br>
+        <p>URLに以下の文字列を含むタブを</p>
         <input id="designate" type="text"><br>
-        <button id="designate_delete">削除</button>
+        <div class="button_wrapper">
+            <button id="designate_delete">削除</button>
+        </div>
+        <hr>
+        <div>
+            <p>ドメインを指定して削除</p>
+            <div id="domains"></div>
+        </div>
         <!-- <button id="except_remain">残す</button> -->
         <script src="popup.js"></script>
     </body>
