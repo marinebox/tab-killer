@@ -1,11 +1,38 @@
 body{
-    min-width: 200px;
+    min-width: 240px;
+
 }
 
 #normal_action{
-    width: 200px;
+    width: 240px;
 }
 
-#designate{
-    min-width: 200px;
+input{
+    min-width: 240px;
+}
+
+.button_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#designate_delete{
+    margin: 3px 0px;
+}
+
+button {
+    border: 1px solid #000;
+    border-radius: 0;
+    background: #fff;
+}
+
+button:hover {
+    color: #fff;
+    background: #000;
+}
+
+.domain_button_wrapper{
+    padding-left: 3px;
+    padding-bottom: 3px;
 }
