@@ -7,7 +7,7 @@ body{
     width: 240px;
 }
 
-input{
+input[type="text"]{
     min-width: 240px;
 }
 
