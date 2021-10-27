@@ -1,3 +1,5 @@
+"use strict";
+
 document.getElementById('normal_action').addEventListener('click', () => {
     chrome.tabs.query({}, tabs => {
         tabs.map((currentTab, index) => {
@@ -24,5 +26,22 @@ document.getElementById('designate_delete').addEventListener('click', () => {
                 chrome.tabs.remove(currentTab.id)
             }
         })
+    })
+});
+
+
+
+document.getElementById('range_tabs').addEventListener('click', () => {
+    const tabsIdUrl = [];
+    chrome.tabs.query({currentWindow: true}, tabs => {
+        tabs.map((tab) => {
+            const url = tab.url;
+            const id = tab.id;
+            tabsIdUrl.push({id, url});
+        })
+        tabsIdUrl.sort((a, b) => {
+            return a.url > b.url ? 1 : -1;
+        });
+        chrome.tabs.move(tabsIdUrl.map(tab => tab.id), {index: 0});
     })
 });
