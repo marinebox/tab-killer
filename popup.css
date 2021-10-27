@@ -3,8 +3,15 @@ body{
 
 }
 
-#normal_action{
-    width: 240px;
+button {
+    border: 1px solid #000;
+    border-radius: 0;
+    background: #fff;
+}
+
+button:hover {
+    color: #fff;
+    background: #000;
 }
 
 input[type="text"]{
@@ -17,22 +24,15 @@ input[type="text"]{
     align-items: center;
 }
 
+.domain_button_wrapper{
+    padding-left: 3px;
+    padding-bottom: 3px;
+}
+
 #designate_delete{
     margin: 3px 0px;
 }
 
-button {
-    border: 1px solid #000;
-    border-radius: 0;
-    background: #fff;
-}
-
-button:hover {
-    color: #fff;
-    background: #000;
-}
-
-.domain_button_wrapper{
-    padding-left: 3px;
-    padding-bottom: 3px;
+#normal_action{
+    width: 240px;
 }
