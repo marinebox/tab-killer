@@ -1,3 +1,4 @@
+"use strict";
 
 const initLocalStorage = () => {
     const isOverWindows = JSON.parse(localStorage.getItem('tabKillerIsOverWindows'));
@@ -46,8 +47,24 @@ document.getElementById('designate_delete').addEventListener('click', () => {
     })
 });
 
-chrome.tabs.query({}, tabs => {
+document.getElementById('range_tabs').addEventListener('click', () => {
+    const tabsIdUrl = [];
+    const isOverWindows = document.getElementById('target_all_windows').checked;
+    const windowQuery = isOverWindows ? {} : {currentWindow: true};
+    chrome.tabs.query(windowQuery, tabs => {
+        tabs.map((tab) => {
+            const url = tab.url;
+            const id = tab.id;
+            tabsIdUrl.push({id, url});
+        })
+        tabsIdUrl.sort((a, b) => {
+            return a.url > b.url ? 1 : -1;
+        });
+        chrome.tabs.move(tabsIdUrl.map(tab => tab.id), {index: 0});
+    })
+});
 
+chrome.tabs.query({}, tabs => {
     // extract the domains
     const tabUrlCounter = {};
     tabs.forEach(tab => {
@@ -76,7 +93,7 @@ chrome.tabs.query({}, tabs => {
         document.getElementById(domain).addEventListener('click', () => {
             chrome.tabs.query({}, tabs => {
                 tabs.map((currentTab) => {
-                    if(currentTab.url.includes(domain)){
+                    if (currentTab.url.includes(domain)) {
                         chrome.tabs.remove(currentTab.id)
                     }
                 })
@@ -85,5 +102,4 @@ chrome.tabs.query({}, tabs => {
             document.getElementById(domain).remove();
         });
     }
-
 });
