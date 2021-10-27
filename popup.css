@@ -18,7 +18,12 @@ input[type="text"]{
     min-width: 240px;
 }
 
-.button_wrapper{
+.button_container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex_container{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,5 +39,11 @@ input[type="text"]{
 }
 
 #normal_action{
-    width: 240px;
+    width: 125px;
+    font-size: 13px;
+}
+
+#range_tabs{
+    width: 125px;
+    font-size: 13px;
 }
