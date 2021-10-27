@@ -3,24 +3,6 @@ body{
 
 }
 
-#normal_action{
-    width: 240px;
-}
-
-input{
-    min-width: 240px;
-}
-
-.button_wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#designate_delete{
-    margin: 3px 0px;
-}
-
 button {
     border: 1px solid #000;
     border-radius: 0;
@@ -32,7 +14,25 @@ button:hover {
     background: #000;
 }
 
+input[type="text"]{
+    min-width: 240px;
+}
+
+.button_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .domain_button_wrapper{
     padding-left: 3px;
     padding-bottom: 3px;
+}
+
+#designate_delete{
+    margin: 3px 0px;
+}
+
+#normal_action{
+    width: 240px;
 }
