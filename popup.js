@@ -49,7 +49,9 @@ document.getElementById('designate_delete').addEventListener('click', () => {
 
 document.getElementById('range_tabs').addEventListener('click', () => {
     const tabsIdUrl = [];
-    chrome.tabs.query({currentWindow: true}, tabs => {
+    const isOverWindows = document.getElementById('target_all_windows').checked;
+    const windowQuery = isOverWindows ? {} : {currentWindow: true};
+    chrome.tabs.query(windowQuery, tabs => {
         tabs.map((tab) => {
             const url = tab.url;
             const id = tab.id;
