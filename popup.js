@@ -79,15 +79,12 @@ chrome.tabs.query({}, tabs => {
     // set button
     for (const [domain, cnt] of Object.entries(tabUrlCounter)) {
         const button = document.createElement("button");
+        button.className = "button is-link is-outlined";
         button.id = domain;
         button.innerHTML = domain + ' (' + cnt + ')';
 
-        const insertDiv = document.createElement('div');
-        insertDiv.className = "domain_button_wrapper";
-        insertDiv.appendChild(button);
-
         const parent = document.getElementById('domains');
-        parent.appendChild(insertDiv);
+        parent.appendChild(button);
 
         // add event listener
         document.getElementById(domain).addEventListener('click', () => {

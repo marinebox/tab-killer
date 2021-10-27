@@ -2,26 +2,43 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="css/bulma.min.css" />
         <link rel="stylesheet" href="css/popup.css">
     </head>
-    <body>
-        <div>
-            <input type="checkbox" id="target_all_windows" name="target_all_windows">
-            <label for="target_all_windows">全ウィンドウを対象</label>
+    <body class="has-background-light">
+        <div class="container p-4 has-background-primary-dark">
+            <h1 class="title has-text-light">
+                Tab Killer
+            </h1>
         </div>
-        <div class="button_container">
-            <button id="normal_action">重複タブを削除</button>
-            <button id="range_tabs">タブを並び替える</button>
+        <div class="container p-4">
+            <div class="container mb-2">
+                <label class="checkbox">
+                    <input type="checkbox" id="target_all_windows">
+                    全ウィンドウを対象
+                </label>
+            </div>
+            <div class="buttons are-small">
+            <button id="normal_action" class="button is-success is-outlined">
+                    重複タブを削除
+                </button>
+                <button id="range_tabs" class="button is-success is-outlined">
+                    タブを並び替える
+                </button>
+            </div>
         </div>
-        <p>URLに以下の文字列を含むタブを</p>
-        <input id="designate" type="text"><br>
-        <div class="flex_container">
-            <button id="designate_delete">削除</button>
+        <div class="container p-4">
+            <p>URLに以下の文字列を含むタブを</p>
+            <div class="is-flex p-1">
+                <input id="designate" class="input mr-2 is-small" type="text" placeholder="消したいURL内のキーワード">
+                <button id="designate_delete" class="button is-danger is-small is-rounded is-outlined">
+                    削除
+                </button>
+            </div>
         </div>
-        <hr>
-        <div>
-            <p>ドメインを指定して削除</p>
-            <div id="domains"></div>
+        <div class="container p-4">
+            <p class="mb-3">ドメイン（ページ数）を指定して削除</p>
+            <div id="domains" class="buttons are-small"></div>
         </div>
         <script src="popup.js"></script>
     </body>
