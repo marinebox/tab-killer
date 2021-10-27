@@ -29,8 +29,6 @@ document.getElementById('designate_delete').addEventListener('click', () => {
     })
 });
 
-
-
 document.getElementById('range_tabs').addEventListener('click', () => {
     const tabsIdUrl = [];
     chrome.tabs.query({currentWindow: true}, tabs => {
