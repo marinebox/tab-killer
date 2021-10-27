@@ -1,15 +1,15 @@
 {
-    "name": "tab-killer",
-    "description": "Close all duplicate tabs.",
-    "version": "0.3",
-    "manifest_version": 3,
+  "name": "tab-killer",
+  "description": "Close all duplicate tabs.",
+  "version": "0.3",
+  "manifest_version": 3,
 
-    "action": {
-        "default_title": "tab-killer",
-        "default_popup": "popup.html"
-    },
-    "background": {
-        "service_worker": "background.js"
-    },
-    "permissions": ["tabs"]
+  "action": {
+    "default_title": "tab-killer",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["tabs"]
 }
