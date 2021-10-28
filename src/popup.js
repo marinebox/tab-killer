@@ -1,23 +1,23 @@
-"use strict";
+'use strict';
 
 const initLocalStorage = () => {
   const isOverWindows = JSON.parse(
-    localStorage.getItem("tabKillerIsOverWindows")
+    localStorage.getItem('tabKillerIsOverWindows')
   );
   if (isOverWindows === null) {
-    localStorage.setItem("tabKillerIsOverWindows", false);
+    localStorage.setItem('tabKillerIsOverWindows', false);
   }
-  document.getElementById("target_all_windows").checked = isOverWindows;
+  document.getElementById('target_all_windows').checked = isOverWindows;
 };
 initLocalStorage();
 
-const checkElement = document.getElementById("target_all_windows");
-checkElement.addEventListener("change", () => {
-  localStorage.setItem("tabKillerIsOverWindows", checkElement.checked);
+const checkElement = document.getElementById('target_all_windows');
+checkElement.addEventListener('change', () => {
+  localStorage.setItem('tabKillerIsOverWindows', checkElement.checked);
 });
 
-document.getElementById("normal_action").addEventListener("click", () => {
-  const isOverWindows = document.getElementById("target_all_windows").checked;
+document.getElementById('normal_action').addEventListener('click', () => {
+  const isOverWindows = document.getElementById('target_all_windows').checked;
   const windowQuery = isOverWindows ? {} : { currentWindow: true };
   chrome.tabs.query(windowQuery, (tabs) => {
     tabs.map((currentTab, index) => {
@@ -31,12 +31,12 @@ document.getElementById("normal_action").addEventListener("click", () => {
   });
 });
 
-document.getElementById("designate_delete").addEventListener("click", () => {
-  const isOverWindows = document.getElementById("target_all_windows").checked;
+document.getElementById('designate_delete').addEventListener('click', () => {
+  const isOverWindows = document.getElementById('target_all_windows').checked;
   const windowQuery = isOverWindows ? {} : { currentWindow: true };
-  const designatedURL = document.getElementById("designate").value;
-  if (designatedURL === "") {
-    alert("空白を条件に指定することはできません。");
+  const designatedURL = document.getElementById('designate').value;
+  if (designatedURL === '') {
+    alert('空白を条件に指定することはできません。');
     return;
   }
   chrome.tabs.query(windowQuery, (tabs) => {
@@ -48,9 +48,9 @@ document.getElementById("designate_delete").addEventListener("click", () => {
   });
 });
 
-document.getElementById("range_tabs").addEventListener("click", () => {
+document.getElementById('range_tabs').addEventListener('click', () => {
   const tabsIdUrl = [];
-  const isOverWindows = document.getElementById("target_all_windows").checked;
+  const isOverWindows = document.getElementById('target_all_windows').checked;
   const windowQuery = isOverWindows ? {} : { currentWindow: true };
   chrome.tabs.query(windowQuery, (tabs) => {
     tabs.map((tab) => {
@@ -73,7 +73,7 @@ chrome.tabs.query({}, (tabs) => {
   const tabUrlCounter = {};
   tabs.forEach((tab) => {
     const url = new URL(tab.url);
-    if (url.protocol !== "http:" && url.protocol !== "https:") {
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       return;
     }
     const domain = url.hostname;
@@ -82,15 +82,15 @@ chrome.tabs.query({}, (tabs) => {
 
   // set button
   for (const [domain, cnt] of Object.entries(tabUrlCounter)) {
-    const button = document.createElement("button");
-    button.className = "button is-link is-outlined";
+    const button = document.createElement('button');
+    button.className = 'button is-link is-outlined';
     button.id = domain;
-    button.innerHTML = domain + " (" + cnt + ")";
+    button.innerHTML = domain + ' (' + cnt + ')';
 
-    const parent = document.getElementById("domains");
+    const parent = document.getElementById('domains');
     parent.appendChild(button);
 
-    document.getElementById(domain).addEventListener("click", () => {
+    document.getElementById(domain).addEventListener('click', () => {
       chrome.tabs.query({}, (tabs) => {
         tabs.map((currentTab) => {
           const currentTabUrl = new URL(currentTab.url);
