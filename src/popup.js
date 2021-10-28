@@ -1,19 +1,20 @@
 "use strict";
 
 const initLocalStorage = () => {
-  const isOverWindows = JSON.parse(
-    localStorage.getItem("tabKillerIsOverWindows")
-  );
-  if (isOverWindows === null) {
-    localStorage.setItem("tabKillerIsOverWindows", false);
-  }
-  document.getElementById("target_all_windows").checked = isOverWindows;
+  chrome.storage.sync.get("tabKillerIsOverWindows", (items) => {
+    console.log(items);
+    if (items.tabKillerIsOverWindows === undefined) {
+      chrome.storage.sync.set({ tabKillerIsOverWindows: false });
+    }
+    document.getElementById("target_all_windows").checked =
+      items.tabKillerIsOverWindows;
+  });
 };
 initLocalStorage();
 
 const checkElement = document.getElementById("target_all_windows");
 checkElement.addEventListener("change", () => {
-  localStorage.setItem("tabKillerIsOverWindows", checkElement.checked);
+  chrome.storage.sync.set({ tabKillerIsOverWindows: checkElement.checked });
 });
 
 document.getElementById("normal_action").addEventListener("click", () => {
@@ -89,7 +90,7 @@ chrome.tabs.query({}, (tabs) => {
 
     const parent = document.getElementById("domains");
     parent.appendChild(button);
-    
+
     document.getElementById(domain).addEventListener("click", () => {
       chrome.tabs.query({}, (tabs) => {
         tabs.map((currentTab) => {
