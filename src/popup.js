@@ -89,7 +89,7 @@ chrome.tabs.query({}, (tabs) => {
 
     const parent = document.getElementById("domains");
     parent.appendChild(button);
-    
+
     document.getElementById(domain).addEventListener("click", () => {
       chrome.tabs.query({}, (tabs) => {
         tabs.map((currentTab) => {
