@@ -72,11 +72,11 @@ chrome.tabs.query({}, (tabs) => {
   // extract the domains
   const tabUrlCounter = {};
   tabs.forEach((tab) => {
-    const url = tab.url;
-    if (!url.includes("http")) {
+    const url = new URL(tab.url);
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
       return;
     }
-    const domain = url.match(/^https?:\/\/([^\/]+)/)[1];
+    const domain = url.hostname;
     tabUrlCounter[domain] = (tabUrlCounter[domain] || 0) + 1;
   });
 
@@ -89,12 +89,12 @@ chrome.tabs.query({}, (tabs) => {
 
     const parent = document.getElementById("domains");
     parent.appendChild(button);
-
-    // add event listener
+    
     document.getElementById(domain).addEventListener("click", () => {
       chrome.tabs.query({}, (tabs) => {
         tabs.map((currentTab) => {
-          if (currentTab.url.includes(domain)) {
+          const currentTabUrl = new URL(currentTab.url);
+          if (currentTabUrl.hostname === domain) {
             chrome.tabs.remove(currentTab.id);
           }
         });
