@@ -81,7 +81,10 @@ chrome.tabs.query({}, (tabs) => {
   });
 
   // set button
-  for (const [domain, cnt] of Object.entries(tabUrlCounter)) {
+  const domains = Object.keys(tabUrlCounter);
+  domains.sort();
+  for (const domain of domains) {
+    const cnt = tabUrlCounter[domain];
     const button = document.createElement("button");
     button.className = "button is-link is-outlined";
     button.id = domain;
@@ -89,7 +92,7 @@ chrome.tabs.query({}, (tabs) => {
 
     const parent = document.getElementById("domains");
     parent.appendChild(button);
-    
+
     document.getElementById(domain).addEventListener("click", () => {
       chrome.tabs.query({}, (tabs) => {
         tabs.map((currentTab) => {
