@@ -2,7 +2,6 @@
 
 const initLocalStorage = () => {
   chrome.storage.sync.get("tabKillerIsOverWindows", (items) => {
-    console.log(items);
     if (items.tabKillerIsOverWindows === undefined) {
       chrome.storage.sync.set({ tabKillerIsOverWindows: false });
     }
