@@ -88,7 +88,10 @@ const setDomainButton = () => {
     });
 
     // set button
-    for (const [domain, cnt] of Object.entries(tabUrlCounter)) {
+    const domains = Object.keys(tabUrlCounter);
+    domains.sort();
+    for (const domain of domains) {
+      const cnt = tabUrlCounter[domain];
       const button = document.createElement("button");
       button.className = "button is-link is-outlined";
       button.id = domain;
@@ -105,9 +108,9 @@ const setDomainButton = () => {
               chrome.tabs.remove(currentTab.id);
             }
           });
+          // remove button
+          document.getElementById(domain).remove();
         });
-        // remove button
-        document.getElementById(domain).remove();
       });
     }
   });
