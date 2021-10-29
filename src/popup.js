@@ -1,25 +1,25 @@
-"use strict";
+'use strict';
 
 const initLocalStorage = () => {
-  chrome.storage.sync.get("tabKillerIsOverWindows", (items) => {
+  chrome.storage.sync.get('tabKillerIsOverWindows', (items) => {
     if (items.tabKillerIsOverWindows === undefined) {
       chrome.storage.sync.set({ tabKillerIsOverWindows: false });
     }
-    document.getElementById("target_all_windows").checked =
+    document.getElementById('target_all_windows').checked =
       items.tabKillerIsOverWindows;
   });
 };
 
 const addEventListeners = () => {
   // checkbox event
-  const checkElement = document.getElementById("target_all_windows");
-  checkElement.addEventListener("change", () => {
+  const checkElement = document.getElementById('target_all_windows');
+  checkElement.addEventListener('change', () => {
     chrome.storage.sync.set({ tabKillerIsOverWindows: checkElement.checked });
   });
 
   // delete duplicate tabs event
-  document.getElementById("normal_action").addEventListener("click", () => {
-    const isOverWindows = document.getElementById("target_all_windows").checked;
+  document.getElementById('normal_action').addEventListener('click', () => {
+    const isOverWindows = document.getElementById('target_all_windows').checked;
     const windowQuery = isOverWindows ? {} : { currentWindow: true };
     chrome.tabs.query(windowQuery, (tabs) => {
       tabs.map((currentTab, index) => {
@@ -34,12 +34,12 @@ const addEventListeners = () => {
   });
 
   // keyword delete tabs event
-  document.getElementById("designate_delete").addEventListener("click", () => {
-    const isOverWindows = document.getElementById("target_all_windows").checked;
+  document.getElementById('designate_delete').addEventListener('click', () => {
+    const isOverWindows = document.getElementById('target_all_windows').checked;
     const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    const designatedURL = document.getElementById("designate").value;
-    if (designatedURL === "") {
-      alert("空白を条件に指定することはできません。");
+    const designatedURL = document.getElementById('designate').value;
+    if (designatedURL === '') {
+      alert('空白を条件に指定することはできません。');
       return;
     }
     chrome.tabs.query(windowQuery, (tabs) => {
@@ -52,9 +52,9 @@ const addEventListeners = () => {
   });
 
   // domain delete tabs event
-  document.getElementById("range_tabs").addEventListener("click", () => {
+  document.getElementById('range_tabs').addEventListener('click', () => {
     const tabsIdUrl = [];
-    const isOverWindows = document.getElementById("target_all_windows").checked;
+    const isOverWindows = document.getElementById('target_all_windows').checked;
     const windowQuery = isOverWindows ? {} : { currentWindow: true };
     chrome.tabs.query(windowQuery, (tabs) => {
       tabs.map((tab) => {
@@ -79,7 +79,7 @@ const setDomainButton = () => {
     const tabUrlCounter = {};
     tabs.forEach((tab) => {
       const url = new URL(tab.url);
-      if (url.protocol !== "http:" && url.protocol !== "https:") {
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') {
         return;
       }
       const domain = url.hostname;
@@ -91,15 +91,15 @@ const setDomainButton = () => {
     domains.sort();
     for (const domain of domains) {
       const cnt = tabUrlCounter[domain];
-      const button = document.createElement("button");
-      button.className = "button is-link is-outlined";
+      const button = document.createElement('button');
+      button.className = 'button is-link is-outlined';
       button.id = domain;
-      button.innerHTML = domain + " (" + cnt + ")";
+      button.innerHTML = domain + ' (' + cnt + ')';
 
-      const parent = document.getElementById("domains");
+      const parent = document.getElementById('domains');
       parent.appendChild(button);
 
-      document.getElementById(domain).addEventListener("click", () => {
+      document.getElementById(domain).addEventListener('click', () => {
         chrome.tabs.query({}, (tabs) => {
           tabs.map((currentTab) => {
             const currentTabUrl = new URL(currentTab.url);
