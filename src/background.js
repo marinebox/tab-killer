@@ -1,3 +1,5 @@
+'use strict';
+
 function tabCount() {
   const tabUrlCounter = {};
 
@@ -13,7 +15,7 @@ function tabCount() {
     }
 
     chrome.action.setBadgeText({
-      text: deplicatedTabNum > 0 ? deplicatedTabNum.toString() : "",
+      text: deplicatedTabNum > 0 ? deplicatedTabNum.toString() : '',
     });
   });
 }
