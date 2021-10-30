@@ -75,7 +75,7 @@ const addEventListeners = () => {
   // screen switch event
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
-    screen_element.addEventListener('click', screenSwicher);
+    screen_element.addEventListener('click', screenSwitcher);
   }
 
   // add white list event
@@ -135,7 +135,7 @@ const setDomainButton = () => {
   });
 };
 
-const screenSwicher = () => {
+const screenSwitcher = () => {
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
     const screen_id = screen_element.id;
@@ -170,8 +170,8 @@ const addWhiteList = () => {
   newWhiteElement.firstChild.innerHTML = addingUrl;
 
   // insert new badge
-  const whiteListBoradElement = document.getElementById('white_list');
-  whiteListBoradElement.appendChild(newWhiteElement);
+  const whiteListBoardElement = document.getElementById('white_list');
+  whiteListBoardElement.appendChild(newWhiteElement);
 
   // clear input
   document.getElementById('white_list_input').value = '';
