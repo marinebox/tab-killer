@@ -9,43 +9,57 @@
     <div class="container p-4 has-background-primary-dark">
       <h1 class="title has-text-light">Tab Killer</h1>
     </div>
-    <div class="container p-4">
-      <div class="container mb-2">
-        <label class="checkbox">
-          <input type="checkbox" id="target_all_windows" />
-          全ウィンドウを対象
-        </label>
+
+    <div class="tabs mt-1" id="tab_zone">
+      <ul>
+        <li class="is-active">
+          <a class="screen_switch" id="screen_console">Console</a>
+        </li>
+        <li><a class="screen_switch" id="screen_whitelist">White List</a></li>
+      </ul>
+    </div>
+
+    <div id="screen_console_block">
+      <div class="container p-4">
+        <div class="container mb-2">
+          <label class="checkbox">
+            <input type="checkbox" id="target_all_windows" />
+            全ウィンドウを対象
+          </label>
+        </div>
+        <div class="buttons are-small">
+          <button id="normal_action" class="button is-success is-outlined">
+            重複タブを削除
+          </button>
+          <button id="range_tabs" class="button is-success is-outlined">
+            タブを並び替える
+          </button>
+        </div>
       </div>
-      <div class="buttons are-small">
-        <button id="normal_action" class="button is-success is-outlined">
-          重複タブを削除
-        </button>
-        <button id="range_tabs" class="button is-success is-outlined">
-          タブを並び替える
-        </button>
+      <div class="container p-4">
+        <p>URLに以下の文字列を含むタブを</p>
+        <div class="is-flex p-1">
+          <input
+            id="designate"
+            class="input mr-2 is-small"
+            type="text"
+            placeholder="消したいURL内のキーワード"
+          />
+          <button
+            id="designate_delete"
+            class="button is-danger is-small is-rounded is-outlined"
+          >
+            削除
+          </button>
+        </div>
+      </div>
+      <div class="container p-4">
+        <p class="mb-3">ドメイン（ページ数）を指定して削除</p>
+        <div id="domains" class="buttons are-small"></div>
       </div>
     </div>
-    <div class="container p-4">
-      <p>URLに以下の文字列を含むタブを</p>
-      <div class="is-flex p-1">
-        <input
-          id="designate"
-          class="input mr-2 is-small"
-          type="text"
-          placeholder="消したいURL内のキーワード"
-        />
-        <button
-          id="designate_delete"
-          class="button is-danger is-small is-rounded is-outlined"
-        >
-          削除
-        </button>
-      </div>
-    </div>
-    <div class="container p-4">
-      <p class="mb-3">ドメイン（ページ数）を指定して削除</p>
-      <div id="domains" class="buttons are-small"></div>
-    </div>
+
+    <div class="screen_whitelist_block">white_list</div>
     <script src="popup.js"></script>
   </body>
 </html>

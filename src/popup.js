@@ -71,6 +71,12 @@ const addEventListeners = () => {
       );
     });
   });
+
+  // screen switch event
+  const screen_elements = document.getElementsByClassName('screen_switch');
+  for (const screen_element of screen_elements) {
+    screen_element.addEventListener('click', screenSwicher);
+  }
 };
 
 const setDomainButton = () => {
@@ -113,6 +119,22 @@ const setDomainButton = () => {
       });
     }
   });
+};
+
+const screenSwicher = () => {
+  const screen_elements = document.getElementsByClassName('screen_switch');
+  for (const screen_element of screen_elements) {
+    const screen_id = screen_element.id;
+    const parent = screen_element.parentElement;
+    const block_element = document.getElementById(screen_id + '_block');
+    if (parent.className.match('is-active')) {
+      parent.classList.remove('is-active');
+      block_element.style.display = 'none';
+    } else {
+      parent.classList.add('is-active');
+      block_element.style.display = 'block';
+    }
+  }
 };
 
 initLocalStorage();
