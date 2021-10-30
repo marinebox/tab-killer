@@ -77,6 +77,11 @@ const addEventListeners = () => {
   for (const screen_element of screen_elements) {
     screen_element.addEventListener('click', screenSwicher);
   }
+
+  // add white list event
+  document
+    .getElementById('add_white_list')
+    .addEventListener('click', addWhiteList);
 };
 
 const setDomainButton = () => {
@@ -137,6 +142,31 @@ const screenSwicher = () => {
   }
 };
 
+const addWhiteList = () => {
+  const addingUrl = document.getElementById('white_list_input').value;
+  if (addingUrl === '') {
+    alert('空白を条件に指定することはできません。');
+    return;
+  }
+
+  // create new badge
+  const newWhiteElement = document.createElement('div');
+  newWhiteElement.id = addingUrl;
+  newWhiteElement.className =
+    'is-flex is-align-items-center mb-1 white_list_card';
+  newWhiteElement.innerHTML = `<span class="tag is-warning mr-2"></span>
+                                <button class="delete"></button>`;
+  newWhiteElement.firstChild.innerHTML = addingUrl;
+
+  // insert new badge
+  const whiteListBoradElement = document.getElementById('white_list');
+  whiteListBoradElement.appendChild(newWhiteElement);
+
+  // clear input
+  document.getElementById('white_list_input').value = '';
+};
+
 initLocalStorage();
 setDomainButton();
 addEventListeners();
+screenSwicher();

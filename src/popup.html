@@ -59,7 +59,36 @@
       </div>
     </div>
 
-    <div class="screen_whitelist_block">white_list</div>
+    <div class="screen_whitelist_block">
+      <div class="container mb-5">
+        <p class="px-3 pb-5">消したくないタブのURLを設定できます。</p>
+        <div class="columns is-mobile ml-1 is-flex is-align-items-center">
+          <h6 class="px-3">White List :</h6>
+          <input
+            id="white_list_input"
+            class="input column mr-3 is-small is-6"
+            type="text"
+            placeholder="domainを入力"
+          />
+          <button
+            id="add_white_list"
+            class="button is-danger is-small is-rounded is-outlined"
+          >
+            追加
+          </button>
+        </div>
+        <div class="box mx-3 white_list_borad" id="white_list">
+          <div class="is-flex is-align-items-center mb-1 white_list_card">
+            <span class="tag is-warning mr-2">https://codepen.io/</span>
+            <button class="delete"></button>
+          </div>
+          <div class="is-flex is-align-items-center mb-1">
+            <span class="tag is-warning mr-2">White List</span>
+            <button class="delete"></button>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>
