@@ -169,4 +169,3 @@ const addWhiteList = () => {
 initLocalStorage();
 setDomainButton();
 addEventListeners();
-screenSwicher();
