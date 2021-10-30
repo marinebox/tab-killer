@@ -82,6 +82,15 @@ const addEventListeners = () => {
   document
     .getElementById('add_white_list')
     .addEventListener('click', addWhiteList);
+
+  // delete white list event
+  const white_list_elements = document.getElementById('white_list');
+  for (const white_list_element of white_list_elements.children) {
+    const buttonElement = white_list_element.lastElementChild;
+    buttonElement.addEventListener('click', () =>
+      deleteWhiteList(buttonElement)
+    );
+  }
 };
 
 const setDomainButton = () => {
@@ -132,7 +141,7 @@ const screenSwicher = () => {
     const screen_id = screen_element.id;
     const parent = screen_element.parentElement;
     const block_element = document.getElementById(screen_id + '_block');
-    if (parent.className.match('is-active')) {
+    if (parent.className.includes('is-active')) {
       parent.classList.remove('is-active');
       block_element.style.display = 'none';
     } else {
@@ -156,6 +165,8 @@ const addWhiteList = () => {
     'is-flex is-align-items-center mb-1 white_list_card';
   newWhiteElement.innerHTML = `<span class="tag is-warning mr-2"></span>
                                 <button class="delete"></button>`;
+  const buttonElement = newWhiteElement.lastElementChild;
+  buttonElement.addEventListener('click', () => deleteWhiteList(buttonElement));
   newWhiteElement.firstChild.innerHTML = addingUrl;
 
   // insert new badge
@@ -164,6 +175,11 @@ const addWhiteList = () => {
 
   // clear input
   document.getElementById('white_list_input').value = '';
+};
+
+const deleteWhiteList = (button_element) => {
+  const parent = button_element.parentElement;
+  parent.remove();
 };
 
 initLocalStorage();
