@@ -223,7 +223,28 @@ const deleteWhiteList = (button_element) => {
   });
 };
 
+const initHistory = () => {
+  chrome.storage.local.get('tabKillerHistory', (items) => {
+    if (items.tabKillerHistory === undefined) {
+      chrome.storage.local.set({ tabKillerHistory: [] });
+    }
+  });
+};
+
+const addHistory = (pageURL, pageTitle) => {
+  chrome.storage.local.get('tabKillerHistory', (items) => {
+    const history = items.tabKillerHistory;
+    const newElement = { URL: pageURL, title: pageTitle };
+    history.push(newElement);
+    while (history.length > 50) {
+      history.shift();
+    }
+    chrome.storage.local.set({ tabKillerHistory: history });
+  });
+};
+
 initLocalStorage();
 initWhiteList();
+initHistory();
 setDomainButton();
 addEventListeners();
