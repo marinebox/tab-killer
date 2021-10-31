@@ -21,13 +21,16 @@ const addEventListeners = () => {
   document.getElementById('normal_action').addEventListener('click', () => {
     const isOverWindows = document.getElementById('target_all_windows').checked;
     const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    chrome.tabs.query(windowQuery, (tabs) => {
-      tabs.map((currentTab, index) => {
-        tabs.slice(index).map((targetTab) => {
-          if (currentTab.id === targetTab.id) return;
-          else if (currentTab.url === targetTab.url) {
-            chrome.tabs.remove(targetTab.id);
-          } else return;
+    chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+      const whiteList = items.tabKillerWhiteList;
+      chrome.tabs.query(windowQuery, (tabs) => {
+        tabs.map((currentTab, index) => {
+          tabs
+            .slice(index)
+            .filter((targetTab) => targetTab.id !== currentTab.id)
+            .filter((targetTab) => targetTab.url === currentTab.url)
+            .filter((targetTab) => !whiteList.includes(targetTab.url))
+            .map((targetTab) => chrome.tabs.remove(targetTab.id));
         });
       });
     });
@@ -151,13 +154,7 @@ const screenSwitcher = () => {
   }
 };
 
-const addWhiteList = () => {
-  const addingUrl = document.getElementById('white_list_input').value;
-  if (addingUrl === '') {
-    alert('空白を条件に指定することはできません。');
-    return;
-  }
-
+const createWhiteListBadge = (addingUrl) => {
   // create new badge
   const newWhiteElement = document.createElement('div');
   newWhiteElement.id = addingUrl;
@@ -172,6 +169,40 @@ const addWhiteList = () => {
   // insert new badge
   const whiteListBoardElement = document.getElementById('white_list');
   whiteListBoardElement.appendChild(newWhiteElement);
+};
+
+const initWhiteList = () => {
+  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+    if (items.tabKillerWhiteList === undefined) {
+      return;
+    }
+    for (const whiteURL of items.tabKillerWhiteList) {
+      createWhiteListBadge(whiteURL);
+    }
+  });
+};
+
+const addWhiteList = () => {
+  const addingUrl = document.getElementById('white_list_input').value;
+  if (addingUrl === '') {
+    alert('空白を条件に指定することはできません。');
+    return;
+  }
+  if (addingUrl === '.' || addingUrl === '/') {
+    alert('無効な文字列です。');
+    return;
+  }
+
+  createWhiteListBadge(addingUrl);
+
+  // add white list storage
+  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+    const whiteListOnStorage = items.tabKillerWhiteList;
+    const newWhiteList =
+      whiteListOnStorage === undefined ? [] : whiteListOnStorage;
+    newWhiteList.push(addingUrl);
+    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
+  });
 
   // clear input
   document.getElementById('white_list_input').value = '';
@@ -180,8 +211,19 @@ const addWhiteList = () => {
 const deleteWhiteList = (button_element) => {
   const parent = button_element.parentElement;
   parent.remove();
+
+  // delete URL on the whitelist and renew storage
+  const deleteURL = parent.id;
+  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+    const whiteListOnStorage = items.tabKillerWhiteList;
+    const newWhiteList = whiteListOnStorage.filter(
+      (whiteURL) => whiteURL !== deleteURL
+    );
+    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
+  });
 };
 
 initLocalStorage();
+initWhiteList();
 setDomainButton();
 addEventListeners();
