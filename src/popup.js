@@ -151,13 +151,7 @@ const screenSwitcher = () => {
   }
 };
 
-const addWhiteList = () => {
-  const addingUrl = document.getElementById('white_list_input').value;
-  if (addingUrl === '') {
-    alert('空白を条件に指定することはできません。');
-    return;
-  }
-
+const createWhiteListBadge = (addingUrl) => {
   // create new badge
   const newWhiteElement = document.createElement('div');
   newWhiteElement.id = addingUrl;
@@ -172,6 +166,16 @@ const addWhiteList = () => {
   // insert new badge
   const whiteListBoardElement = document.getElementById('white_list');
   whiteListBoardElement.appendChild(newWhiteElement);
+};
+
+const addWhiteList = () => {
+  const addingUrl = document.getElementById('white_list_input').value;
+  if (addingUrl === '') {
+    alert('空白を条件に指定することはできません。');
+    return;
+  }
+
+  createWhiteListBadge(addingUrl);
 
   // clear input
   document.getElementById('white_list_input').value = '';
