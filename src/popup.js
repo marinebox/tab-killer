@@ -49,6 +49,7 @@ const addEventListeners = () => {
       tabs.map((currentTab) => {
         if (currentTab.url.match(designatedURL)) {
           chrome.tabs.remove(currentTab.id);
+          addHistory(currentTab.url, currentTab.title);
         }
       });
     });
@@ -128,6 +129,7 @@ const setDomainButton = () => {
             const currentTabUrl = new URL(currentTab.url);
             if (currentTabUrl.hostname === domain) {
               chrome.tabs.remove(currentTab.id);
+              addHistory(currentTab.url, currentTab.title);
             }
           });
           // remove button
