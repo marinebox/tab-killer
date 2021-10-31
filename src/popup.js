@@ -188,12 +188,24 @@ const addWhiteList = () => {
 
   createWhiteListBadge(addingUrl);
 
+  // add white list storage
+  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+    const whiteListOnStorage = items.tabKillerWhiteList;
+    let whiteListOnLocal = [];
+    if (whiteListOnStorage !== undefined) {
+      whiteListOnLocal = whiteListOnStorage;
+    }
+    whiteListOnLocal.push(addingUrl);
+    chrome.storage.sync.set({ tabKillerWhiteList: whiteListOnLocal });
+  });
+
   // clear input
   document.getElementById('white_list_input').value = '';
 };
 
 const deleteWhiteList = (button_element) => {
   const parent = button_element.parentElement;
+
   parent.remove();
 };
 
