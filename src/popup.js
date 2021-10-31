@@ -205,7 +205,14 @@ const addWhiteList = () => {
 
 const deleteWhiteList = (button_element) => {
   const parent = button_element.parentElement;
-
+  const deleteURL = parent.id;
+  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+    const whiteListOnStorage = items.tabKillerWhiteList;
+    const newWhiteList = whiteListOnStorage.filter(
+      (whiteURL) => whiteURL !== deleteURL
+    );
+    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
+  });
   parent.remove();
 };
 
