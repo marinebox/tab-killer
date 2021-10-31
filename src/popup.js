@@ -21,13 +21,20 @@ const addEventListeners = () => {
   document.getElementById('normal_action').addEventListener('click', () => {
     const isOverWindows = document.getElementById('target_all_windows').checked;
     const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    chrome.tabs.query(windowQuery, (tabs) => {
-      tabs.map((currentTab, index) => {
-        tabs.slice(index).map((targetTab) => {
-          if (currentTab.id === targetTab.id) return;
-          else if (currentTab.url === targetTab.url) {
-            chrome.tabs.remove(targetTab.id);
-          } else return;
+    chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+      const whiteList = items.tabKillerWhiteList;
+      chrome.tabs.query(windowQuery, (tabs) => {
+        tabs.map((currentTab, index) => {
+          tabs.slice(index).map((targetTab) => {
+            if (currentTab.id === targetTab.id) return;
+            else if (currentTab.url === targetTab.url) {
+              // whitelist と合致するか？
+              for (const whiteURL of whiteList) {
+                if (currentTab.url === whiteURL) return;
+              }
+              chrome.tabs.remove(targetTab.id);
+            } else return;
+          });
         });
       });
     });
