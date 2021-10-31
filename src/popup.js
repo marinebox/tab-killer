@@ -25,16 +25,12 @@ const addEventListeners = () => {
       const whiteList = items.tabKillerWhiteList;
       chrome.tabs.query(windowQuery, (tabs) => {
         tabs.map((currentTab, index) => {
-          tabs.slice(index).map((targetTab) => {
-            if (currentTab.id === targetTab.id) return;
-            else if (currentTab.url === targetTab.url) {
-              // whitelist と合致するか？
-              for (const whiteURL of whiteList) {
-                if (currentTab.url === whiteURL) return;
-              }
-              chrome.tabs.remove(targetTab.id);
-            } else return;
-          });
+          tabs
+            .slice(index)
+            .filter((targetTab) => targetTab.id !== currentTab.id)
+            .filter((targetTab) => targetTab.url === currentTab.url)
+            .filter((targetTab) => !whiteList.includes(targetTab.url))
+            .map((targetTab) => chrome.tabs.remove(targetTab.id));
         });
       });
     });
@@ -202,7 +198,7 @@ const addWhiteList = () => {
   // add white list storage
   chrome.storage.sync.get('tabKillerWhiteList', (items) => {
     const whiteListOnStorage = items.tabKillerWhiteList;
-    let newWhiteList =
+    const newWhiteList =
       whiteListOnStorage === undefined ? [] : whiteListOnStorage;
     newWhiteList.push(addingUrl);
     chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
