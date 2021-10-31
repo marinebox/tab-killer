@@ -185,6 +185,10 @@ const addWhiteList = () => {
     alert('空白を条件に指定することはできません。');
     return;
   }
+  if (addingUrl === '.' || addingUrl === '/') {
+    alert('無効な文字列です。');
+    return;
+  }
 
   createWhiteListBadge(addingUrl);
 
