@@ -168,6 +168,17 @@ const createWhiteListBadge = (addingUrl) => {
   whiteListBoardElement.appendChild(newWhiteElement);
 };
 
+const initWhiteList = () => {
+  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+    if (items.tabKillerWhiteList === undefined) {
+      return;
+    }
+    for (const whiteURL of items.tabKillerWhiteList) {
+      createWhiteListBadge(whiteURL);
+    }
+  });
+};
+
 const addWhiteList = () => {
   const addingUrl = document.getElementById('white_list_input').value;
   if (addingUrl === '') {
@@ -187,5 +198,6 @@ const deleteWhiteList = (button_element) => {
 };
 
 initLocalStorage();
+initWhiteList();
 setDomainButton();
 addEventListeners();
