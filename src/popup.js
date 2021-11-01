@@ -45,14 +45,19 @@ const addEventListeners = () => {
       alert('空白を条件に指定することはできません。');
       return;
     }
+    const newHistoryElements = [];
     chrome.tabs.query(windowQuery, (tabs) => {
       tabs.map((currentTab) => {
         if (currentTab.url.match(designatedURL)) {
           chrome.tabs.remove(currentTab.id);
-          addHistory(currentTab.url, currentTab.title);
+          newHistoryElements.push({
+            url: currentTab.url,
+            title: currentTab.title,
+          });
         }
       });
     });
+    addHistory(newHistoryElements);
   });
 
   // domain delete tabs event
@@ -124,17 +129,22 @@ const setDomainButton = () => {
       parent.appendChild(button);
 
       document.getElementById(domain).addEventListener('click', () => {
+        const newHistoryElements = [];
         chrome.tabs.query({}, (tabs) => {
           tabs.map((currentTab) => {
             const currentTabUrl = new URL(currentTab.url);
             if (currentTabUrl.hostname === domain) {
               chrome.tabs.remove(currentTab.id);
-              addHistory(currentTab.url, currentTab.title);
+              newHistoryElements.push({
+                url: currentTab.url,
+                title: currentTab.title,
+              });
             }
           });
           // remove button
           document.getElementById(domain).remove();
         });
+        addHistory(newHistoryElements);
       });
     }
   });
@@ -233,11 +243,12 @@ const initHistory = () => {
   });
 };
 
-const addHistory = (pageURL, pageTitle) => {
+const addHistory = (newHistoryElements) => {
   chrome.storage.local.get('tabKillerHistory', (items) => {
     const history = items.tabKillerHistory;
-    const newElement = { URL: pageURL, title: pageTitle };
-    history.push(newElement);
+    for (const newElement of newHistoryElements) {
+      history.push(newElement);
+    }
     while (history.length > 50) {
       history.shift();
     }
