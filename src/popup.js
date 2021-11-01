@@ -45,13 +45,19 @@ const addEventListeners = () => {
       alert('空白を条件に指定することはできません。');
       return;
     }
+    const newHistoryFactors = [];
     chrome.tabs.query(windowQuery, (tabs) => {
       tabs.map((currentTab) => {
         if (currentTab.url.match(designatedURL)) {
           chrome.tabs.remove(currentTab.id);
+          newHistoryFactors.push({
+            url: currentTab.url,
+            title: currentTab.title,
+          });
         }
       });
     });
+    addHistory(newHistoryFactors);
   });
 
   // domain delete tabs event
@@ -123,16 +129,22 @@ const setDomainButton = () => {
       parent.appendChild(button);
 
       document.getElementById(domain).addEventListener('click', () => {
+        const newHistoryFactors = [];
         chrome.tabs.query({}, (tabs) => {
           tabs.map((currentTab) => {
             const currentTabUrl = new URL(currentTab.url);
             if (currentTabUrl.hostname === domain) {
               chrome.tabs.remove(currentTab.id);
+              newHistoryFactors.push({
+                url: currentTab.url,
+                title: currentTab.title,
+              });
             }
           });
           // remove button
           document.getElementById(domain).remove();
         });
+        addHistory(newHistoryFactors);
       });
     }
   });
@@ -223,7 +235,29 @@ const deleteWhiteList = (button_element) => {
   });
 };
 
+const initHistory = () => {
+  chrome.storage.local.get('tabKillerHistory', (items) => {
+    if (items.tabKillerHistory === undefined) {
+      chrome.storage.local.set({ tabKillerHistory: [] });
+    }
+  });
+};
+
+const addHistory = (newHistoryFactors) => {
+  chrome.storage.local.get('tabKillerHistory', (items) => {
+    const history = items.tabKillerHistory;
+    for (const newElement of newHistoryFactors) {
+      history.push(newElement);
+    }
+    while (history.length > 50) {
+      history.shift();
+    }
+    chrome.storage.local.set({ tabKillerHistory: history });
+  });
+};
+
 initLocalStorage();
 initWhiteList();
+initHistory();
 setDomainButton();
 addEventListeners();
