@@ -84,7 +84,9 @@ const addEventListeners = () => {
   // screen switch event
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
-    screen_element.addEventListener('click', screenSwitcher);
+    screen_element.addEventListener('click', () =>
+      screenSwitcher(screen_element)
+    );
   }
 
   // add white list event
@@ -150,18 +152,18 @@ const setDomainButton = () => {
   });
 };
 
-const screenSwitcher = () => {
+const screenSwitcher = (clicked_element) => {
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
     const screen_id = screen_element.id;
     const parent = screen_element.parentElement;
     const block_element = document.getElementById(screen_id + '_block');
-    if (parent.className.includes('is-active')) {
-      parent.classList.remove('is-active');
-      block_element.style.display = 'none';
-    } else {
+    if (clicked_element.id === screen_id) {
       parent.classList.add('is-active');
       block_element.style.display = 'block';
+    } else {
+      parent.classList.remove('is-active');
+      block_element.style.display = 'none';
     }
   }
 };
