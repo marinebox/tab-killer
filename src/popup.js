@@ -102,6 +102,11 @@ const addEventListeners = () => {
       deleteWhiteList(buttonElement)
     );
   }
+
+  // make history list when history tab clicked
+  document.getElementById('screen_history').addEventListener('click', () => {
+    initHistory();
+  });
 };
 
 const setDomainButton = () => {
@@ -242,9 +247,30 @@ const initHistory = () => {
     if (items.tabKillerHistory === undefined) {
       chrome.storage.local.set({ tabKillerHistory: [] });
     }
+    const historyList = document.getElementById('history_list');
+    historyList.innerHTML = '';
+    const historyFactors = items.tabKillerHistory;
+
+    for (const historyFactor of historyFactors.reverse()) {
+      const newHistoryElement = document.createElement('li');
+      const history_link = document.createElement('a');
+      history_link.href = historyFactor.url;
+      const title = historyFactor.title;
+      history_link.innerHTML =
+        title.length >= 50 ? title.slice(0, 50) + '...' : title;
+      history_link.target = '_blank';
+
+      newHistoryElement.appendChild(history_link);
+      historyList.appendChild(newHistoryElement);
+    }
   });
 };
 
+/**
+ * @param {Object} newHistoryFactors
+ * @param {string} newHistoryFactors.url
+ * @param {string} newHistoryFactors.title
+ */
 const addHistory = (newHistoryFactors) => {
   chrome.storage.local.get('tabKillerHistory', (items) => {
     const history = items.tabKillerHistory;
@@ -260,6 +286,6 @@ const addHistory = (newHistoryFactors) => {
 
 initLocalStorage();
 initWhiteList();
-initHistory();
+
 setDomainButton();
 addEventListeners();
