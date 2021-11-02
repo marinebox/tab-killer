@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="css/bulma.min.css" />
     <link rel="stylesheet" href="css/popup.css" />
   </head>
-  <body class="has-background-light">
+  <body class="has-background-white">
     <div class="container p-4 has-background-primary-dark">
       <h1 class="title has-text-light">Tab Killer</h1>
     </div>
@@ -16,6 +16,7 @@
           <a class="screen_switch" id="screen_console">Console</a>
         </li>
         <li><a class="screen_switch" id="screen_whitelist">White List</a></li>
+        <li><a class="screen_switch" id="screen_history">History</a></li>
       </ul>
     </div>
 
@@ -78,6 +79,12 @@
           </button>
         </div>
         <div class="box mx-3 white_list_borad" id="white_list"></div>
+      </div>
+    </div>
+
+    <div id="screen_history_block" style="display: none">
+      <div class="container">
+        <ul class="menu-list" id="history_list"></ul>
       </div>
     </div>
     <script src="popup.js"></script>
