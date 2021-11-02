@@ -240,6 +240,7 @@ const initHistory = () => {
   chrome.storage.local.get('tabKillerHistory', (items) => {
     if (items.tabKillerHistory === undefined) {
       chrome.storage.local.set({ tabKillerHistory: [] });
+      return;
     }
     const historyList = document.getElementById('history_list');
     historyList.innerHTML = '';
