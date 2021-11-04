@@ -5,6 +5,7 @@ module.exports = {
     node: true,
     webextensions: true,
     es6: true,
+    module: true,
   },
   extends: ['eslint:recommended', 'prettier'],
   parserOptions: {

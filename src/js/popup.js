@@ -1,6 +1,10 @@
 'use strict';
 
-const initLocalStorage = () => {
+import { setDomainButton } from './domain.js';
+import { addHistory, initHistory } from './history.js';
+import { addWhiteList, deleteWhiteList, initWhiteList } from './whitelist.js';
+
+const initKillOverWindow = () => {
   chrome.storage.sync.get('tabKillerIsOverWindows', (items) => {
     if (items.tabKillerIsOverWindows === undefined) {
       chrome.storage.sync.set({ tabKillerIsOverWindows: false });
@@ -106,51 +110,6 @@ const addEventListeners = () => {
   });
 };
 
-const setDomainButton = () => {
-  chrome.tabs.query({}, (tabs) => {
-    // extract the domains
-    const tabUrlCounter = {};
-    tabs.forEach((tab) => {
-      const url = new URL(tab.url);
-      if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-        return;
-      }
-      const domain = url.hostname;
-      tabUrlCounter[domain] = (tabUrlCounter[domain] || 0) + 1;
-    });
-
-    // set button
-    const domains = Object.keys(tabUrlCounter);
-    domains.sort();
-    for (const domain of domains) {
-      const cnt = tabUrlCounter[domain];
-      const button = document.createElement('button');
-      button.className = 'button is-link is-outlined';
-      button.id = domain;
-      button.innerHTML = domain + ' (' + cnt + ')';
-
-      const parent = document.getElementById('domains');
-      parent.appendChild(button);
-
-      document.getElementById(domain).addEventListener('click', () => {
-        const newHistoryFactors = {};
-        chrome.tabs.query({}, (tabs) => {
-          tabs.map((currentTab) => {
-            const currentTabUrl = new URL(currentTab.url);
-            if (currentTabUrl.hostname === domain) {
-              chrome.tabs.remove(currentTab.id);
-              newHistoryFactors[currentTab.url] = currentTab.title;
-            }
-          });
-          // remove button
-          document.getElementById(domain).remove();
-        });
-        addHistory(newHistoryFactors);
-      });
-    }
-  });
-};
-
 const screenSwitcher = (clicked_element) => {
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
@@ -167,124 +126,7 @@ const screenSwitcher = (clicked_element) => {
   }
 };
 
-const createWhiteListBadge = (addingUrl) => {
-  // create new badge
-  const newWhiteElement = document.createElement('div');
-  newWhiteElement.id = addingUrl;
-  newWhiteElement.className =
-    'is-flex is-align-items-center mb-1 white_list_card';
-  newWhiteElement.innerHTML = `<span class="tag is-warning mr-2"></span>
-                                <button class="delete"></button>`;
-  const buttonElement = newWhiteElement.lastElementChild;
-  buttonElement.addEventListener('click', () => deleteWhiteList(buttonElement));
-  newWhiteElement.firstChild.innerHTML = addingUrl;
-
-  // insert new badge
-  const whiteListBoardElement = document.getElementById('white_list');
-  whiteListBoardElement.appendChild(newWhiteElement);
-};
-
-const initWhiteList = () => {
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    if (items.tabKillerWhiteList === undefined) {
-      return;
-    }
-    for (const whiteURL of items.tabKillerWhiteList) {
-      createWhiteListBadge(whiteURL);
-    }
-  });
-};
-
-const addWhiteList = () => {
-  const addingUrl = document.getElementById('white_list_input').value;
-  if (addingUrl === '') {
-    alert('空白を条件に指定することはできません。');
-    return;
-  }
-  if (addingUrl === '.' || addingUrl === '/') {
-    alert('無効な文字列です。');
-    return;
-  }
-
-  createWhiteListBadge(addingUrl);
-
-  // add white list storage
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    const whiteListOnStorage = items.tabKillerWhiteList;
-    const newWhiteList =
-      whiteListOnStorage === undefined ? [] : whiteListOnStorage;
-    newWhiteList.push(addingUrl);
-    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
-  });
-
-  // clear input
-  document.getElementById('white_list_input').value = '';
-};
-
-const deleteWhiteList = (button_element) => {
-  const parent = button_element.parentElement;
-  parent.remove();
-
-  // delete URL on the whitelist and renew storage
-  const deleteURL = parent.id;
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    const whiteListOnStorage = items.tabKillerWhiteList;
-    const newWhiteList = whiteListOnStorage.filter(
-      (whiteURL) => whiteURL !== deleteURL
-    );
-    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
-  });
-};
-
-const initHistory = () => {
-  chrome.storage.local.get('tabKillerHistory', (items) => {
-    if (items.tabKillerHistory === undefined) {
-      chrome.storage.local.set({ tabKillerHistory: [] });
-      return;
-    }
-    const historyList = document.getElementById('history_list');
-    historyList.innerHTML = '';
-    const historyFactors = items.tabKillerHistory;
-
-    for (const historyFactor of historyFactors.reverse()) {
-      const newHistoryElement = document.createElement('li');
-      const history_link = document.createElement('a');
-      history_link.href = historyFactor.url;
-      const title = historyFactor.title;
-      const hasTooltip = title.length >= 50;
-
-      // if title is too long, show tooltip
-      if (hasTooltip) {
-        newHistoryElement.dataset.tooltip = title;
-      }
-
-      history_link.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
-      history_link.target = '_blank';
-
-      newHistoryElement.appendChild(history_link);
-      historyList.appendChild(newHistoryElement);
-    }
-  });
-};
-
-/**
- * @param {Object} newHistoryFactors
- */
-const addHistory = (newHistoryFactors) => {
-  chrome.storage.local.get('tabKillerHistory', (items) => {
-    const history = items.tabKillerHistory;
-    Object.keys(newHistoryFactors).map((key) => {
-      history.push({ url: key, title: newHistoryFactors[key] });
-    });
-    while (history.length > 50) {
-      history.shift();
-    }
-    chrome.storage.local.set({ tabKillerHistory: history });
-  });
-};
-
-initLocalStorage();
+initKillOverWindow();
 initWhiteList();
-
 setDomainButton();
 addEventListeners();
