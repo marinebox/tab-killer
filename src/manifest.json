@@ -1,7 +1,7 @@
 {
   "name": "tab-killer",
   "description": "Close all duplicate tabs.",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "manifest_version": 3,
 
   "action": {
@@ -11,5 +11,11 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["tabs", "storage"]
+  "permissions": ["tabs", "storage"],
+
+  "icons": {
+    "16": "images/16icon.png",
+    "48": "images/48icon.png",
+    "128": "images/128icon.png"
+  }
 }

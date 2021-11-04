@@ -45,13 +45,16 @@ const addEventListeners = () => {
       alert('空白を条件に指定することはできません。');
       return;
     }
+    const newHistoryFactors = {};
     chrome.tabs.query(windowQuery, (tabs) => {
       tabs.map((currentTab) => {
         if (currentTab.url.match(designatedURL)) {
           chrome.tabs.remove(currentTab.id);
+          newHistoryFactors[currentTab.url] = currentTab.title;
         }
       });
     });
+    addHistory(newHistoryFactors);
   });
 
   // domain delete tabs event
@@ -78,7 +81,9 @@ const addEventListeners = () => {
   // screen switch event
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
-    screen_element.addEventListener('click', screenSwitcher);
+    screen_element.addEventListener('click', () =>
+      screenSwitcher(screen_element)
+    );
   }
 
   // add white list event
@@ -94,6 +99,11 @@ const addEventListeners = () => {
       deleteWhiteList(buttonElement)
     );
   }
+
+  // make history list when history tab clicked
+  document.getElementById('screen_history').addEventListener('click', () => {
+    initHistory();
+  });
 };
 
 const setDomainButton = () => {
@@ -123,33 +133,36 @@ const setDomainButton = () => {
       parent.appendChild(button);
 
       document.getElementById(domain).addEventListener('click', () => {
+        const newHistoryFactors = {};
         chrome.tabs.query({}, (tabs) => {
           tabs.map((currentTab) => {
             const currentTabUrl = new URL(currentTab.url);
             if (currentTabUrl.hostname === domain) {
               chrome.tabs.remove(currentTab.id);
+              newHistoryFactors[currentTab.url] = currentTab.title;
             }
           });
           // remove button
           document.getElementById(domain).remove();
         });
+        addHistory(newHistoryFactors);
       });
     }
   });
 };
 
-const screenSwitcher = () => {
+const screenSwitcher = (clicked_element) => {
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
     const screen_id = screen_element.id;
     const parent = screen_element.parentElement;
     const block_element = document.getElementById(screen_id + '_block');
-    if (parent.className.includes('is-active')) {
-      parent.classList.remove('is-active');
-      block_element.style.display = 'none';
-    } else {
+    if (clicked_element.id === screen_id) {
       parent.classList.add('is-active');
       block_element.style.display = 'block';
+    } else {
+      parent.classList.remove('is-active');
+      block_element.style.display = 'none';
     }
   }
 };
@@ -223,7 +236,55 @@ const deleteWhiteList = (button_element) => {
   });
 };
 
+const initHistory = () => {
+  chrome.storage.local.get('tabKillerHistory', (items) => {
+    if (items.tabKillerHistory === undefined) {
+      chrome.storage.local.set({ tabKillerHistory: [] });
+      return;
+    }
+    const historyList = document.getElementById('history_list');
+    historyList.innerHTML = '';
+    const historyFactors = items.tabKillerHistory;
+
+    for (const historyFactor of historyFactors.reverse()) {
+      const newHistoryElement = document.createElement('li');
+      const history_link = document.createElement('a');
+      history_link.href = historyFactor.url;
+      const title = historyFactor.title;
+      const hasTooltip = title.length >= 50;
+
+      // if title is too long, show tooltip
+      if (hasTooltip) {
+        newHistoryElement.dataset.tooltip = title;
+      }
+
+      history_link.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
+      history_link.target = '_blank';
+
+      newHistoryElement.appendChild(history_link);
+      historyList.appendChild(newHistoryElement);
+    }
+  });
+};
+
+/**
+ * @param {Object} newHistoryFactors
+ */
+const addHistory = (newHistoryFactors) => {
+  chrome.storage.local.get('tabKillerHistory', (items) => {
+    const history = items.tabKillerHistory;
+    Object.keys(newHistoryFactors).map((key) => {
+      history.push({ url: key, title: newHistoryFactors[key] });
+    });
+    while (history.length > 50) {
+      history.shift();
+    }
+    chrome.storage.local.set({ tabKillerHistory: history });
+  });
+};
+
 initLocalStorage();
 initWhiteList();
+
 setDomainButton();
 addEventListeners();
