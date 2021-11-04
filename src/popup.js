@@ -251,14 +251,14 @@ const initHistory = () => {
       const history_link = document.createElement('a');
       history_link.href = historyFactor.url;
       const title = historyFactor.title;
+      const hasTooltip = title.length >= 50;
 
       // if title is too long, show tooltip
-      if (title.length > 50) {
+      if (hasTooltip) {
         newHistoryElement.dataset.tooltip = title;
       }
 
-      history_link.innerHTML =
-        title.length >= 50 ? title.slice(0, 50) + '...' : title;
+      history_link.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
       history_link.target = '_blank';
 
       newHistoryElement.appendChild(history_link);
