@@ -1,5 +1,21 @@
 'use strict';
 
+export const setWhiteListEventListeners = () => {
+  // add white list event
+  document
+    .getElementById('add_white_list')
+    .addEventListener('click', addWhiteList);
+
+  // delete white list event
+  const white_list_elements = document.getElementById('white_list');
+  for (const white_list_element of white_list_elements.children) {
+    const buttonElement = white_list_element.lastElementChild;
+    buttonElement.addEventListener('click', () =>
+      deleteWhiteList(buttonElement)
+    );
+  }
+};
+
 export const initWhiteList = () => {
   chrome.storage.sync.get('tabKillerWhiteList', (items) => {
     if (items.tabKillerWhiteList === undefined) return;

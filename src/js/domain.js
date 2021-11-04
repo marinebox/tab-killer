@@ -2,7 +2,30 @@
 
 import { addHistory } from './history.js';
 
-export const setDomainButton = () => {
+export const setDomainEventListeners = (domain) => {
+  // domain delete tabs event
+  document.getElementById('range_tabs').addEventListener('click', () => {
+    const tabsIdUrl = [];
+    const isOverWindows = document.getElementById('target_all_windows').checked;
+    const windowQuery = isOverWindows ? {} : { currentWindow: true };
+    chrome.tabs.query(windowQuery, (tabs) => {
+      tabs.map((tab) => {
+        const url = tab.url;
+        const id = tab.id;
+        tabsIdUrl.push({ id, url });
+      });
+      tabsIdUrl.sort((a, b) => {
+        return a.url > b.url ? 1 : -1;
+      });
+      chrome.tabs.move(
+        tabsIdUrl.map((tab) => tab.id),
+        { index: 0 }
+      );
+    });
+  });
+};
+
+export const initDomainButton = () => {
   chrome.tabs.query({}, (tabs) => {
     // extract the domains
     const tabUrlCounter = {};

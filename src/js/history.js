@@ -1,5 +1,12 @@
 'use strict';
 
+export const setHistoryEventListeners = () => {
+  // make history list when history tab clicked
+  document.getElementById('screen_history').addEventListener('click', () => {
+    initHistory();
+  });
+};
+
 export const initHistory = () => {
   chrome.storage.local.get('tabKillerHistory', (items) => {
     if (items.tabKillerHistory === undefined) return;

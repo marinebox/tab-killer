@@ -1,8 +1,8 @@
 'use strict';
 
-import { setDomainButton } from './domain.js';
-import { addHistory, initHistory } from './history.js';
-import { addWhiteList, deleteWhiteList, initWhiteList } from './whitelist.js';
+import { initDomainButton, setDomainEventListeners } from './domain.js';
+import { addHistory, setHistoryEventListeners } from './history.js';
+import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
 const initKillOverWindow = () => {
   chrome.storage.sync.get('tabKillerIsOverWindows', (items) => {
@@ -15,6 +15,10 @@ const initKillOverWindow = () => {
 };
 
 const addEventListeners = () => {
+  setWhiteListEventListeners();
+  setDomainEventListeners();
+  setHistoryEventListeners();
+
   // checkbox event
   const checkElement = document.getElementById('target_all_windows');
   checkElement.addEventListener('change', () => {
@@ -61,27 +65,6 @@ const addEventListeners = () => {
     addHistory(newHistoryFactors);
   });
 
-  // domain delete tabs event
-  document.getElementById('range_tabs').addEventListener('click', () => {
-    const tabsIdUrl = [];
-    const isOverWindows = document.getElementById('target_all_windows').checked;
-    const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    chrome.tabs.query(windowQuery, (tabs) => {
-      tabs.map((tab) => {
-        const url = tab.url;
-        const id = tab.id;
-        tabsIdUrl.push({ id, url });
-      });
-      tabsIdUrl.sort((a, b) => {
-        return a.url > b.url ? 1 : -1;
-      });
-      chrome.tabs.move(
-        tabsIdUrl.map((tab) => tab.id),
-        { index: 0 }
-      );
-    });
-  });
-
   // screen switch event
   const screen_elements = document.getElementsByClassName('screen_switch');
   for (const screen_element of screen_elements) {
@@ -89,25 +72,6 @@ const addEventListeners = () => {
       screenSwitcher(screen_element)
     );
   }
-
-  // add white list event
-  document
-    .getElementById('add_white_list')
-    .addEventListener('click', addWhiteList);
-
-  // delete white list event
-  const white_list_elements = document.getElementById('white_list');
-  for (const white_list_element of white_list_elements.children) {
-    const buttonElement = white_list_element.lastElementChild;
-    buttonElement.addEventListener('click', () =>
-      deleteWhiteList(buttonElement)
-    );
-  }
-
-  // make history list when history tab clicked
-  document.getElementById('screen_history').addEventListener('click', () => {
-    initHistory();
-  });
 };
 
 const screenSwitcher = (clicked_element) => {
@@ -128,5 +92,5 @@ const screenSwitcher = (clicked_element) => {
 
 initKillOverWindow();
 initWhiteList();
-setDomainButton();
+initDomainButton();
 addEventListeners();
