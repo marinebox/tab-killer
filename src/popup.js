@@ -45,15 +45,12 @@ const addEventListeners = () => {
       alert('空白を条件に指定することはできません。');
       return;
     }
-    const newHistoryFactors = [];
+    const newHistoryFactors = {};
     chrome.tabs.query(windowQuery, (tabs) => {
       tabs.map((currentTab) => {
         if (currentTab.url.match(designatedURL)) {
           chrome.tabs.remove(currentTab.id);
-          newHistoryFactors.push({
-            url: currentTab.url,
-            title: currentTab.title,
-          });
+          newHistoryFactors[currentTab.url] = currentTab.title;
         }
       });
     });
@@ -136,16 +133,13 @@ const setDomainButton = () => {
       parent.appendChild(button);
 
       document.getElementById(domain).addEventListener('click', () => {
-        const newHistoryFactors = [];
+        const newHistoryFactors = {};
         chrome.tabs.query({}, (tabs) => {
           tabs.map((currentTab) => {
             const currentTabUrl = new URL(currentTab.url);
             if (currentTabUrl.hostname === domain) {
               chrome.tabs.remove(currentTab.id);
-              newHistoryFactors.push({
-                url: currentTab.url,
-                title: currentTab.title,
-              });
+              newHistoryFactors[currentTab.url] = currentTab.title;
             }
           });
           // remove button
@@ -246,6 +240,7 @@ const initHistory = () => {
   chrome.storage.local.get('tabKillerHistory', (items) => {
     if (items.tabKillerHistory === undefined) {
       chrome.storage.local.set({ tabKillerHistory: [] });
+      return;
     }
     const historyList = document.getElementById('history_list');
     historyList.innerHTML = '';
@@ -274,15 +269,13 @@ const initHistory = () => {
 
 /**
  * @param {Object} newHistoryFactors
- * @param {string} newHistoryFactors.url
- * @param {string} newHistoryFactors.title
  */
 const addHistory = (newHistoryFactors) => {
   chrome.storage.local.get('tabKillerHistory', (items) => {
     const history = items.tabKillerHistory;
-    for (const newElement of newHistoryFactors) {
-      history.push(newElement);
-    }
+    Object.keys(newHistoryFactors).map((key) => {
+      history.push({ url: key, title: newHistoryFactors[key] });
+    });
     while (history.length > 50) {
       history.shift();
     }
