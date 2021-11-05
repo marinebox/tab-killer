@@ -7,11 +7,13 @@ import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
 const initKillOverWindow = () => {
   chrome.storage.sync.get('tabKillerIsOverWindows', (items) => {
-    if (items.tabKillerIsOverWindows === undefined) {
-      chrome.storage.sync.set({ tabKillerIsOverWindows: false });
-    }
-    document.getElementById('target_all_windows').checked =
-      items.tabKillerIsOverWindows;
+    const isKillOverWindow =
+      items.tabKillerIsOverWindows === undefined
+        ? false
+        : items.tabKillerIsOverWindows;
+
+    chrome.storage.sync.set({ tabKillerIsOverWindows: isKillOverWindow });
+    document.getElementById('target_all_windows').checked = isKillOverWindow;
   });
 };
 
