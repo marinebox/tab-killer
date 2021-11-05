@@ -1,7 +1,7 @@
 'use strict';
 
 import { initDomainButton, setDomainEventListeners } from './domain.js';
-import { addHistory, setHistoryEventListeners } from './history.js';
+import { addHistory } from './history.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -18,7 +18,6 @@ const initKillOverWindow = () => {
 const addEventListeners = () => {
   setWhiteListEventListeners();
   setDomainEventListeners();
-  setHistoryEventListeners();
   setScreenSwitchEventListeners();
 
   // checkbox event
@@ -65,6 +64,27 @@ const addEventListeners = () => {
       });
     });
     addHistory(newHistoryFactors);
+  });
+
+  // domain arrangement
+  document.getElementById('range_tabs').addEventListener('click', () => {
+    const tabsIdUrl = [];
+    const isOverWindows = document.getElementById('target_all_windows').checked;
+    const windowQuery = isOverWindows ? {} : { currentWindow: true };
+    chrome.tabs.query(windowQuery, (tabs) => {
+      tabs.map((tab) => {
+        const url = tab.url;
+        const id = tab.id;
+        tabsIdUrl.push({ id, url });
+      });
+      tabsIdUrl.sort((a, b) => {
+        return a.url > b.url ? 1 : -1;
+      });
+      chrome.tabs.move(
+        tabsIdUrl.map((tab) => tab.id),
+        { index: 0 }
+      );
+    });
   });
 };
 
