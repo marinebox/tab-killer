@@ -2,7 +2,7 @@
 
 import { addHistory } from './history.js';
 
-export const setDomainEventListeners = (domain) => {
+export const setDomainEventListeners = () => {
   // domain delete tabs event
   document.getElementById('range_tabs').addEventListener('click', () => {
     const tabsIdUrl = [];
