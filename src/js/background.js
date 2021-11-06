@@ -9,7 +9,6 @@ const tabCount = () => {
       tabUrlCounter[url] = (tabUrlCounter[url] || 0) + 1;
     });
 
-    console.log(tabUrlCounter);
     const duplicatedTabNum = Object.values(tabUrlCounter).reduce(
       (prev, current) => prev + current - 1,
       0
