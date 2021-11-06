@@ -1,7 +1,7 @@
 'use strict';
 
 import { initDomainButton } from './domain.js';
-import { addHistory } from './history.js';
+import { addHistory, setHistoryEventListeners } from './history.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -19,6 +19,7 @@ const initKillOverWindow = () => {
 
 const addEventListeners = () => {
   setWhiteListEventListeners();
+  setHistoryEventListeners();
   setScreenSwitchEventListeners();
 
   // checkbox event
