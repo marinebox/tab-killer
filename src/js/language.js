@@ -46,7 +46,7 @@ const placeholderIdsWord = new Map([
 export const iniLanguage = () => {
   chrome.storage.local.get('tabKillerLanguage', (items) => {
     // 設定されていなければ日本語にする
-    if (items.language === undefined) {
+    if (items.tabKillerLanguage === undefined) {
       document.getElementById('lang_ja').classList.add('is-active');
       return;
     }
