@@ -17,8 +17,8 @@ export const initHistory = () => {
 
     for (const historyFactor of historyFactors.reverse()) {
       const newHistoryElement = document.createElement('li');
-      const history_link = document.createElement('a');
-      history_link.href = historyFactor.url;
+      const historyLink = document.createElement('a');
+      historyLink.href = historyFactor.url;
       const title = historyFactor.title;
       const hasTooltip = title.length >= 50;
 
@@ -27,10 +27,10 @@ export const initHistory = () => {
         newHistoryElement.dataset.tooltip = title;
       }
 
-      history_link.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
-      history_link.target = '_blank';
+      historyLink.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
+      historyLink.target = '_blank';
 
-      newHistoryElement.appendChild(history_link);
+      newHistoryElement.appendChild(historyLink);
       historyList.appendChild(newHistoryElement);
     }
   });

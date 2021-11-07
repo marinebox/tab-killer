@@ -2,26 +2,26 @@
 
 export const setScreenSwitchEventListeners = () => {
   // screen switch event
-  const screen_elements = document.getElementsByClassName('screen_switch');
-  for (const screen_element of screen_elements) {
-    screen_element.addEventListener('click', () =>
-      screenSwitcher(screen_element)
+  const screenElements = document.getElementsByClassName('screen_switch');
+  for (const screenElement of screenElements) {
+    screenElement.addEventListener('click', () =>
+      screenSwitcher(screenElement)
     );
   }
 };
 
-const screenSwitcher = (clicked_element) => {
-  const screen_elements = document.getElementsByClassName('screen_switch');
-  for (const screen_element of screen_elements) {
-    const screen_id = screen_element.id;
-    const parent = screen_element.parentElement;
-    const block_element = document.getElementById(screen_id + '_block');
-    if (clicked_element.id === screen_id) {
+const screenSwitcher = (clickedElement) => {
+  const screenElements = document.getElementsByClassName('screen_switch');
+  for (const screenElement of screenElements) {
+    const screenId = screenElement.id;
+    const parent = screenElement.parentElement;
+    const blockElement = document.getElementById(screenId + '_block');
+    if (clickedElement.id === screenId) {
       parent.classList.add('is-active');
-      block_element.style.display = 'block';
+      blockElement.style.display = 'block';
     } else {
       parent.classList.remove('is-active');
-      block_element.style.display = 'none';
+      blockElement.style.display = 'none';
     }
   }
 };
