@@ -18,7 +18,7 @@
       <div class="header_title is-flex-shrink-0">
         <h1 class="title has-text-light">Tab Killer</h1>
       </div>
-      <div class="dropdown is-active" id="language_dropdown">
+      <div class="dropdown" id="language_dropdown">
         <div class="dropdown-trigger">
           <button
             class="button"
@@ -40,8 +40,12 @@
           role="menu"
         >
           <div class="dropdown-content">
-            <a href="#" class="dropdown-item is-active"> 日本語 </a>
-            <a class="dropdown-item"> English </a>
+            <a class="dropdown-item language_dropdown_item" id="lang_ja">
+              日本語
+            </a>
+            <a class="dropdown-item language_dropdown_item" id="lang_en">
+              English
+            </a>
           </div>
         </div>
       </div>
@@ -62,7 +66,7 @@
         <div class="container mb-2">
           <label class="checkbox">
             <input type="checkbox" id="target_all_windows" />
-            全ウィンドウを対象
+            <span id="target_all_windows_label">全ウィンドウを対象</span>
           </label>
         </div>
         <div class="buttons are-small">
@@ -75,7 +79,7 @@
         </div>
       </div>
       <div class="container p-4">
-        <p>URLに以下の文字列を含むタブを</p>
+        <p id="word_delete_message">URLに以下の文字列を含むタブを</p>
         <div class="is-flex p-1">
           <input
             id="designate"
@@ -92,14 +96,18 @@
         </div>
       </div>
       <div class="container p-4">
-        <p class="mb-3">ドメイン（ページ数）を指定して削除</p>
+        <p class="mb-3" id="domain_delete_message">
+          ドメイン（ページ数）を指定して削除
+        </p>
         <div id="domains" class="buttons are-small"></div>
       </div>
     </div>
 
     <div id="screen_whitelist_block" style="display: none">
       <div class="container mb-5">
-        <p class="px-3 pb-5">消したくないタブのURLを設定できます。</p>
+        <p class="px-3 pb-5" id="white_list_message">
+          消したくないタブのURLを設定できます。
+        </p>
         <div class="columns is-mobile ml-1 is-flex is-align-items-center">
           <h6 class="px-3">White List :</h6>
           <input

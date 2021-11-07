@@ -2,6 +2,7 @@
 
 import { initDomainButton } from './domain.js';
 import { addHistory, setHistoryEventListeners } from './history.js';
+import { iniLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -18,6 +19,7 @@ const initKillOverWindow = () => {
 };
 
 const addEventListeners = () => {
+  setLanguageEventListeners();
   setWhiteListEventListeners();
   setHistoryEventListeners();
   setScreenSwitchEventListeners();
@@ -90,6 +92,7 @@ const addEventListeners = () => {
   });
 };
 
+iniLanguage();
 initKillOverWindow();
 initWhiteList();
 initDomainButton();
