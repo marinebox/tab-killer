@@ -11,5 +11,6 @@ module.exports = {
     ecmaVersion: 13,
     sourceType: 'module',
   },
+  ignorePatterns: ['/src/icon/*'],
   rules: { 'no-console': 'warn' },
 };
