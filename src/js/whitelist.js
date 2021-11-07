@@ -7,9 +7,9 @@ export const setWhiteListEventListeners = () => {
     .addEventListener('click', addWhiteList);
 
   // delete white list event
-  const white_list_elements = document.getElementById('white_list');
-  for (const white_list_element of white_list_elements.children) {
-    const buttonElement = white_list_element.lastElementChild;
+  const whiteListElements = document.getElementById('white_list');
+  for (const whiteListElement of whiteListElements.children) {
+    const buttonElement = whiteListElement.lastElementChild;
     buttonElement.addEventListener('click', () =>
       deleteWhiteList(buttonElement)
     );
@@ -69,8 +69,8 @@ const createWhiteListBadge = (addingUrl) => {
   whiteListBoardElement.appendChild(newWhiteElement);
 };
 
-export const deleteWhiteList = (button_element) => {
-  const parent = button_element.parentElement;
+export const deleteWhiteList = (buttonElement) => {
+  const parent = buttonElement.parentElement;
   parent.remove();
 
   // delete URL on the whitelist and renew storage
