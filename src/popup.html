@@ -4,10 +4,51 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="css/bulma.min.css" />
     <link rel="stylesheet" href="css/popup.css" />
+    <script defer src="icon/all.min.js"></script>
   </head>
   <body class="has-background-white">
-    <div class="container p-4 has-background-primary-dark">
-      <h1 class="title has-text-light">Tab Killer</h1>
+    <div
+      class="
+        container
+        p-4
+        has-background-primary-dark
+        is-flex is-align-items-center is-justify-content-space-between
+      "
+    >
+      <div class="header_title is-flex-shrink-0">
+        <h1 class="title has-text-light">Tab Killer</h1>
+      </div>
+      <div class="dropdown" id="language_dropdown">
+        <div class="dropdown-trigger">
+          <button
+            class="button"
+            aria-haspopup="true"
+            aria-controls="dropdown-menu"
+          >
+            <span class="icon is-small">
+              <i class="fas fa-globe"></i>
+            </span>
+            <span>Language</span>
+            <span class="icon is-small">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+        <div
+          class="dropdown-menu language_dropdown_menu"
+          id="dropdown-menu"
+          role="menu"
+        >
+          <div class="dropdown-content">
+            <a class="dropdown-item language_dropdown_item" id="lang_ja">
+              日本語
+            </a>
+            <a class="dropdown-item language_dropdown_item" id="lang_en">
+              English
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="tabs mt-1" id="tab_zone">
@@ -25,7 +66,7 @@
         <div class="container mb-2">
           <label class="checkbox">
             <input type="checkbox" id="target_all_windows" />
-            全ウィンドウを対象
+            <span id="target_all_windows_label">全ウィンドウを対象</span>
           </label>
         </div>
         <div class="buttons are-small">
@@ -38,7 +79,7 @@
         </div>
       </div>
       <div class="container p-4">
-        <p>URLに以下の文字列を含むタブを</p>
+        <p id="word_delete_message">URLに以下の文字列を含むタブを</p>
         <div class="is-flex p-1">
           <input
             id="designate"
@@ -55,14 +96,18 @@
         </div>
       </div>
       <div class="container p-4">
-        <p class="mb-3">ドメイン（ページ数）を指定して削除</p>
+        <p class="mb-3" id="domain_delete_message">
+          ドメイン（ページ数）を指定して削除
+        </p>
         <div id="domains" class="buttons are-small"></div>
       </div>
     </div>
 
     <div id="screen_whitelist_block" style="display: none">
       <div class="container mb-5">
-        <p class="px-3 pb-5">消したくないタブのURLを設定できます。</p>
+        <p class="px-3 pb-5" id="white_list_message">
+          消したくないタブのURLを設定できます。
+        </p>
         <div class="columns is-mobile ml-1 is-flex is-align-items-center">
           <h6 class="px-3">White List :</h6>
           <input
