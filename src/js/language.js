@@ -44,14 +44,14 @@ const placeholderIdsWord = new Map([
 ]);
 
 export const iniLanguage = () => {
-  chrome.storage.local.get('language', (items) => {
+  chrome.storage.local.get('tabKillerLanguage', (items) => {
     // 設定されていなければ日本語にする
     if (items.language === undefined) {
       document.getElementById('lang_ja').classList.add('is-active');
       return;
     }
 
-    const language = items.language;
+    const language = items.tabKillerLanguage;
     document.getElementById(`lang_${language}`).classList.add('is-active');
 
     // insert english
@@ -78,7 +78,7 @@ const switchDropdownActiveItems = (element) => {
     if (element.id === item.id) {
       item.classList.add('is-active');
       const lang = item.id.replace('lang_', '');
-      chrome.storage.local.set({ language: lang });
+      chrome.storage.local.set({ tabKillerLanguage: lang });
       iniLanguage();
     } else {
       item.classList.remove('is-active');
