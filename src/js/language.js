@@ -43,7 +43,7 @@ const placeholderIdsWord = new Map([
   ['designate', { en: 'URL keyword', ja: '消したいURL内のキーワード' }],
 ]);
 
-export const iniLanguage = () => {
+export const initLanguage = () => {
   chrome.storage.local.get('tabKillerLanguage', (items) => {
     // 設定されていなければ日本語にする
     if (items.tabKillerLanguage === undefined) {
@@ -79,7 +79,7 @@ const switchDropdownActiveItems = (element) => {
       item.classList.add('is-active');
       const lang = item.id.replace('lang_', '');
       chrome.storage.local.set({ tabKillerLanguage: lang });
-      iniLanguage();
+      initLanguage();
     } else {
       item.classList.remove('is-active');
     }
