@@ -14,6 +14,9 @@ export const setWhiteListEventListeners = () => {
       deleteWhiteList(buttonElement)
     );
   }
+
+  const allClearButton = document.getElementById('all_clear_button');
+  allClearButton.addEventListener('click', allClear);
 };
 
 export const initWhiteList = () => {
@@ -83,4 +86,10 @@ export const deleteWhiteList = (buttonElement) => {
         : whiteListOnStorage.filter((whiteURL) => whiteURL !== deleteURL);
     chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
   });
+};
+
+const allClear = () => {
+  chrome.storage.sync.set({ tabKillerWhiteList: [] });
+  const whiteListBoardElement = document.getElementById('white_list');
+  whiteListBoardElement.innerHTML = '';
 };
