@@ -35,7 +35,8 @@ const addEventListeners = () => {
     const isOverWindows = document.getElementById('target_all_windows').checked;
     const windowQuery = isOverWindows ? {} : { currentWindow: true };
     chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-      const whiteList = items.tabKillerWhiteList;
+      const whiteList =
+        items.tabKillerWhiteList === undefined ? [] : items.tabKillerWhiteList;
       chrome.tabs.query(windowQuery, (tabs) => {
         tabs.map((currentTab, index) => {
           tabs
