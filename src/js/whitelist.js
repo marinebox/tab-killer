@@ -29,7 +29,7 @@ export const initWhiteList = () => {
   });
 };
 
-export const addWhiteList = () => {
+const addWhiteList = () => {
   const addingUrl = document.getElementById('white_list_input').value;
   if (addingUrl === '') {
     alert('空白を条件に指定することはできません。');
@@ -72,7 +72,7 @@ const createWhiteListBadge = (addingUrl) => {
   whiteListBoardElement.appendChild(newWhiteElement);
 };
 
-export const deleteWhiteList = (buttonElement) => {
+const deleteWhiteList = (buttonElement) => {
   const parent = buttonElement.parentElement;
   parent.remove();
 
