@@ -24,6 +24,7 @@ export const setWhiteListEventListeners = () => {
       deleteWhiteList(buttonElement)
     );
   }
+
   const allClearButton = document.getElementById('all_clear_button');
   allClearButton.addEventListener('click', allClear);
 };
