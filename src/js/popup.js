@@ -91,6 +91,36 @@ const addEventListeners = () => {
       );
     });
   });
+
+  document.getElementById('normal_action').addEventListener('mouseover', () => {
+    const isOverWindows = document.getElementById('target_all_windows').checked;
+    const windowQuery = isOverWindows ? {} : { currentWindow: true };
+    const urlCounter = {};
+    const urlTitleDictionary = {};
+    chrome.tabs.query(windowQuery, (tabs) => {
+      tabs.map((currentTab) => {
+        const title = currentTab.title;
+        const url = new URL(currentTab.url);
+        urlCounter[url.href] = (urlCounter[url.href] || 0) + 1;
+        urlTitleDictionary[url.href] = title;
+      });
+      const urlKeys = Object.keys(urlCounter);
+      urlKeys.sort();
+
+      const duplicates = [];
+      urlKeys.forEach((url) => {
+        if (urlCounter[url] > 1) {
+          duplicates.push({
+            url: url,
+            title: urlTitleDictionary[url],
+            count: urlCounter[url],
+          });
+        }
+      });
+
+      const normalButton = document.getElementById('normal_action');
+    });
+  });
 };
 
 initLanguage();
