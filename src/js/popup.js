@@ -119,6 +119,18 @@ const addEventListeners = () => {
       });
 
       const normalButton = document.getElementById('normal_action');
+      let isFirstLine = true;
+      let titleString = '';
+      duplicates.forEach((value) => {
+        console.log(value);
+        if (isFirstLine) {
+          titleString = value['title'] + ': ' + value['count'];
+          isFirstLine = false;
+        } else {
+          titleString += '\n' + value['title'] + ': ' + value['count'];
+        }
+      });
+      normalButton.title = titleString;
     });
   });
 };
