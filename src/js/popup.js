@@ -122,7 +122,6 @@ const addEventListeners = () => {
       let isFirstLine = true;
       let titleString = '';
       duplicates.forEach((value) => {
-        console.log(value);
         if (isFirstLine) {
           titleString = value['title'] + ': ' + value['count'];
           isFirstLine = false;
