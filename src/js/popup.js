@@ -95,9 +95,9 @@ const addEventListeners = () => {
   document.getElementById('normal_action').addEventListener('mouseover', () => {
     const isOverWindows = document.getElementById('target_all_windows').checked;
     const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    const urlCounter = {};
-    const urlTitleDictionary = {};
     chrome.tabs.query(windowQuery, (tabs) => {
+      const urlCounter = {};
+      const urlTitleDictionary = {};
       tabs.map((currentTab) => {
         const title = currentTab.title;
         const url = new URL(currentTab.url);
