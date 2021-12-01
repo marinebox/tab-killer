@@ -6,6 +6,16 @@ export const setWhiteListEventListeners = () => {
     .getElementById('add_white_list')
     .addEventListener('click', addWhiteList);
 
+  // add present url whitelist event
+  document
+    .getElementById('add_present_URL_whitelist')
+    .addEventListener('click', addPresentUrlWhiteList);
+
+  // add present domain whitelist event
+  document
+    .getElementById('add_present_domain_whitelist')
+    .addEventListener('click', addPresentDomainWhiteList);
+
   // delete white list event
   const whiteListElements = document.getElementById('white_list');
   for (const whiteListElement of whiteListElements.children) {
@@ -29,7 +39,7 @@ export const initWhiteList = () => {
   });
 };
 
-export const addWhiteList = () => {
+const addWhiteList = () => {
   const addingUrl = document.getElementById('white_list_input').value;
   if (addingUrl === '') {
     alert('空白を条件に指定することはできません。');
@@ -41,18 +51,26 @@ export const addWhiteList = () => {
   }
 
   createWhiteListBadge(addingUrl);
-
-  // add white list storage
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    const whiteListOnStorage = items.tabKillerWhiteList;
-    const newWhiteList =
-      whiteListOnStorage === undefined ? [] : whiteListOnStorage;
-    newWhiteList.push(addingUrl);
-    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
-  });
+  addWhiteListStorage(addingUrl);
 
   // clear input
   document.getElementById('white_list_input').value = '';
+};
+
+const addPresentUrlWhiteList = () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const presentURL = new URL(tabs[0].url);
+    createWhiteListBadge(presentURL.href);
+    addWhiteListStorage(presentURL.href);
+  });
+};
+
+const addPresentDomainWhiteList = () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const presentURL = new URL(tabs[0].url);
+    createWhiteListBadge(presentURL.hostname);
+    addWhiteListStorage(presentURL.hostname);
+  });
 };
 
 const createWhiteListBadge = (addingUrl) => {
@@ -72,7 +90,18 @@ const createWhiteListBadge = (addingUrl) => {
   whiteListBoardElement.appendChild(newWhiteElement);
 };
 
-export const deleteWhiteList = (buttonElement) => {
+const addWhiteListStorage = (addingUrl) => {
+  // add new URL white list on storage
+  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+    const whiteListOnStorage = items.tabKillerWhiteList;
+    const newWhiteList =
+      whiteListOnStorage === undefined ? [] : whiteListOnStorage;
+    newWhiteList.push(addingUrl);
+    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
+  });
+};
+
+const deleteWhiteList = (buttonElement) => {
   const parent = buttonElement.parentElement;
   parent.remove();
 
