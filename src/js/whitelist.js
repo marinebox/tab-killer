@@ -39,7 +39,7 @@ export const initWhiteList = () => {
   });
 };
 
-const addWhiteList = () => {
+const addWhiteList = async () => {
   const addingUrl = document.getElementById('white_list_input').value;
   if (addingUrl === '') {
     alert('空白を条件に指定することはできません。');
@@ -47,6 +47,12 @@ const addWhiteList = () => {
   }
   if (addingUrl === '.' || addingUrl === '/') {
     alert('無効な文字列です。');
+    return;
+  }
+
+  const isDuplicate = await isDuplicateUrlOnStorage(addingUrl);
+  if (isDuplicate) {
+    alert('already exists');
     return;
   }
 
@@ -58,16 +64,29 @@ const addWhiteList = () => {
 };
 
 const addPresentUrlWhiteList = () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     const presentURL = new URL(tabs[0].url);
+
+    const isDuplicate = await isDuplicateUrlOnStorage(presentURL.href);
+    if (isDuplicate) {
+      alert('already exists');
+      return;
+    }
+
     createWhiteListBadge(presentURL.href);
     addWhiteListStorage(presentURL.href);
   });
 };
 
 const addPresentDomainWhiteList = () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     const presentURL = new URL(tabs[0].url);
+
+    const isDuplicate = await isDuplicateUrlOnStorage(presentURL.hostname);
+    if (isDuplicate) {
+      alert('already exists');
+      return;
+    }
     createWhiteListBadge(presentURL.hostname);
     addWhiteListStorage(presentURL.hostname);
   });
@@ -121,4 +140,13 @@ const allClear = () => {
   chrome.storage.sync.set({ tabKillerWhiteList: [] });
   const whiteListBoardElement = document.getElementById('white_list');
   whiteListBoardElement.innerHTML = '';
+};
+
+const isDuplicateUrlOnStorage = (urlString) => {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get('tabKillerWhiteList', (items) => {
+      const whiteListOnStorage = items.tabKillerWhiteList || [];
+      return resolve(whiteListOnStorage.includes(urlString));
+    });
+  });
 };
