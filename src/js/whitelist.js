@@ -31,14 +31,11 @@ export const setWhiteListEventListeners = () => {
   allClearButton.addEventListener('click', allClear);
 };
 
-export const initWhiteList = () => {
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    if (items.tabKillerWhiteList === undefined) return;
-
-    for (const whiteURL of items.tabKillerWhiteList) {
-      createWhiteListBadge(whiteURL);
-    }
-  });
+export const initWhiteList = async () => {
+  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  for (const whiteURL of whiteListOnStorage) {
+    createWhiteListBadge(whiteURL);
+  }
 };
 
 const addWhiteList = async () => {
