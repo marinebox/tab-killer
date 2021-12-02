@@ -137,9 +137,18 @@ const deleteWhiteList = (buttonElement) => {
 };
 
 const allClear = () => {
-  chrome.storage.sync.set({ tabKillerWhiteList: [] });
-  const whiteListBoardElement = document.getElementById('white_list');
-  whiteListBoardElement.innerHTML = '';
+  chrome.storage.sync.get('tabKillerLanguage', (items) => {
+    const lang = items.tabKillerLanguage || 'ja';
+    const confirmMessage =
+      lang === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
+    const isDelete = confirm(confirmMessage);
+
+    if (isDelete) {
+      chrome.storage.sync.set({ tabKillerWhiteList: [] });
+      const whiteListBoardElement = document.getElementById('white_list');
+      whiteListBoardElement.innerHTML = '';
+    }
+  });
 };
 
 const isDuplicateUrlOnStorage = (urlString) => {
