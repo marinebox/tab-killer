@@ -1,6 +1,6 @@
 'use strict';
 
-import { getSyncStorage } from './utils.js';
+import { getLocalStorage, getSyncStorage } from './utils.js';
 
 export const setWhiteListEventListeners = () => {
   // add white list event
@@ -136,17 +136,15 @@ const deleteWhiteList = async (buttonElement) => {
   chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
 };
 
-const allClear = () => {
-  chrome.storage.local.get('tabKillerLanguage', (items) => {
-    const lang = items.tabKillerLanguage;
-    const confirmMessage =
-      lang === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
-    const isDelete = confirm(confirmMessage);
+const allClear = async () => {
+  const lang = (await getLocalStorage('tabKillerLanguage')) || 'ja';
+  const confirmMessage =
+    lang === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
+  const isDelete = confirm(confirmMessage);
 
-    if (isDelete) {
-      chrome.storage.sync.set({ tabKillerWhiteList: [] });
-      const whiteListBoardElement = document.getElementById('white_list');
-      whiteListBoardElement.innerHTML = '';
-    }
-  });
+  if (isDelete) {
+    chrome.storage.sync.set({ tabKillerWhiteList: [] });
+    const whiteListBoardElement = document.getElementById('white_list');
+    whiteListBoardElement.innerHTML = '';
+  }
 };
