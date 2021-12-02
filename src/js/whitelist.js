@@ -137,8 +137,8 @@ const deleteWhiteList = (buttonElement) => {
 };
 
 const allClear = () => {
-  chrome.storage.sync.get('tabKillerLanguage', (items) => {
-    const lang = items.tabKillerLanguage || 'ja';
+  chrome.storage.local.get('tabKillerLanguage', (items) => {
+    const lang = items.tabKillerLanguage;
     const confirmMessage =
       lang === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
     const isDelete = confirm(confirmMessage);
