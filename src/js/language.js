@@ -36,6 +36,20 @@ const translateIdWord = new Map([
       ja: '追加',
     },
   ],
+  [
+    'add_present_URL_whitelist',
+    {
+      en: 'Add present URL',
+      ja: '現在のページを追加',
+    },
+  ],
+  [
+    'add_present_domain_whitelist',
+    {
+      en: 'Add present domain',
+      ja: '現在のページのドメインを追加',
+    },
+  ],
 ]);
 
 const placeholderIdsWord = new Map([
