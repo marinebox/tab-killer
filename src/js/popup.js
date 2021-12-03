@@ -57,7 +57,7 @@ const addEventListeners = () => {
       }
 
       const isOverWindows =
-        document.getElementById('target_all_windows').checked;
+        (await getSyncStorage('tabKillerIsOverWindows')) || false;
       const tabs = isOverWindows
         ? await getAllTabs()
         : await getTabsOnActiveWindow();
@@ -77,7 +77,8 @@ const addEventListeners = () => {
   // domain arrangement
   document.getElementById('range_tabs').addEventListener('click', async () => {
     const tabsIdUrl = [];
-    const isOverWindows = document.getElementById('target_all_windows').checked;
+    const isOverWindows =
+      (await getSyncStorage('tabKillerIsOverWindows')) || false;
     const tabs = isOverWindows
       ? await getAllTabs()
       : await getTabsOnActiveWindow();
@@ -99,7 +100,7 @@ const addEventListeners = () => {
     .getElementById('normal_action')
     .addEventListener('mouseover', async () => {
       const isOverWindows =
-        document.getElementById('target_all_windows').checked;
+        (await getSyncStorage('tabKillerIsOverWindows')) || false;
       const tabs = isOverWindows
         ? await getAllTabs()
         : await getTabsOnActiveWindow();
