@@ -1,6 +1,6 @@
 'use strict';
 
-import { getLocalStorage, getSyncStorage } from './utils.js';
+import { getCurrentTab, getLocalStorage, getSyncStorage } from './utils.js';
 
 export const setWhiteListEventListeners = () => {
   // add white list event
@@ -64,38 +64,34 @@ const addWhiteList = async () => {
   document.getElementById('white_list_input').value = '';
 };
 
-const addPresentUrlWhiteList = () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-    const presentURL = new URL(tabs[0].url);
+const addPresentUrlWhiteList = async () => {
+  const currentTab = await getCurrentTab();
+  const presentURL = new URL(currentTab.url);
 
-    const whiteListOnStorage =
-      (await getSyncStorage('tabKillerWhiteList')) || [];
-    const isDuplicate = whiteListOnStorage.includes(presentURL.href);
+  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const isDuplicate = whiteListOnStorage.includes(presentURL.href);
 
-    if (isDuplicate) {
-      alert('already exists');
-      return;
-    }
+  if (isDuplicate) {
+    alert('already exists');
+    return;
+  }
 
-    createWhiteListBadge(presentURL.href);
-    addWhiteListStorage(presentURL.href);
-  });
+  createWhiteListBadge(presentURL.href);
+  addWhiteListStorage(presentURL.href);
 };
 
-const addPresentDomainWhiteList = () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-    const presentURL = new URL(tabs[0].url);
+const addPresentDomainWhiteList = async () => {
+  const currentTab = await getCurrentTab();
+  const presentURL = new URL(currentTab.url);
 
-    const whiteListOnStorage =
-      (await getSyncStorage('tabKillerWhiteList')) || [];
-    const isDuplicate = whiteListOnStorage.includes(presentURL.hostname);
-    if (isDuplicate) {
-      alert('already exists');
-      return;
-    }
-    createWhiteListBadge(presentURL.hostname);
-    addWhiteListStorage(presentURL.hostname);
-  });
+  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const isDuplicate = whiteListOnStorage.includes(presentURL.hostname);
+  if (isDuplicate) {
+    alert('already exists');
+    return;
+  }
+  createWhiteListBadge(presentURL.hostname);
+  addWhiteListStorage(presentURL.hostname);
 };
 
 const createWhiteListBadge = (addingUrl) => {

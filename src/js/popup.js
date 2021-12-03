@@ -4,7 +4,7 @@ import { initDomainButton } from './domain.js';
 import { addHistory, setHistoryEventListeners } from './history.js';
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
-import { getSyncStorage } from './utils.js';
+import { getAllTabs, getSyncStorage, getTabsOnActiveWindow } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
 const initKillOverWindow = async () => {
@@ -32,67 +32,78 @@ const addEventListeners = () => {
     .addEventListener('click', async () => {
       const isOverWindows =
         (await getSyncStorage('tabKillerIsOverWindows')) || false;
-      const windowQuery = isOverWindows ? {} : { currentWindow: true };
+      const tabs = isOverWindows
+        ? await getAllTabs()
+        : await getTabsOnActiveWindow();
 
       const whiteList = (await getSyncStorage('whiteList')) || [];
-      chrome.tabs.query(windowQuery, (tabs) => {
-        tabs.map((currentTab, index) => {
-          tabs
-            .slice(index)
-            .filter((targetTab) => targetTab.id !== currentTab.id)
-            .filter((targetTab) => targetTab.url === currentTab.url)
-            .filter((targetTab) => !whiteList.includes(targetTab.url))
-            .map((targetTab) => chrome.tabs.remove(targetTab.id));
-        });
+      tabs.map((currentTab, index) => {
+        tabs
+          .slice(index)
+          .filter((targetTab) => targetTab.id !== currentTab.id)
+          .filter((targetTab) => targetTab.url === currentTab.url)
+          .filter((targetTab) => !whiteList.includes(targetTab.url))
+          .map((targetTab) => chrome.tabs.remove(targetTab.id));
       });
     });
 
   // keyword delete tabs event
-  document.getElementById('designate_delete').addEventListener('click', () => {
-    const isOverWindows = document.getElementById('target_all_windows').checked;
-    const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    const designatedURL = document.getElementById('designate').value;
-    if (designatedURL === '') {
-      alert('空白を条件に指定することはできません。');
-      return;
-    }
-    const newHistoryFactors = {};
-    chrome.tabs.query(windowQuery, (tabs) => {
+  document
+    .getElementById('designate_delete')
+    .addEventListener('click', async () => {
+      if (designatedURL === '') {
+        alert('空白を条件に指定することはできません。');
+        return;
+      }
+
+      const isOverWindows =
+        document.getElementById('target_all_windows').checked;
+      const tabs = isOverWindows
+        ? await getAllTabs()
+        : await getTabsOnActiveWindow();
+      const designatedURL = document.getElementById('designate').value;
+      const newHistoryFactors = {};
+
       tabs.map((currentTab) => {
         if (currentTab.url.match(designatedURL)) {
           chrome.tabs.remove(currentTab.id);
           newHistoryFactors[currentTab.url] = currentTab.title;
         }
       });
+
+      addHistory(newHistoryFactors);
     });
-    addHistory(newHistoryFactors);
-  });
 
   // domain arrangement
-  document.getElementById('range_tabs').addEventListener('click', () => {
+  document.getElementById('range_tabs').addEventListener('click', async () => {
     const tabsIdUrl = [];
     const isOverWindows = document.getElementById('target_all_windows').checked;
-    const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    chrome.tabs.query(windowQuery, (tabs) => {
-      tabs.map((tab) => {
-        const url = tab.url;
-        const id = tab.id;
-        tabsIdUrl.push({ id, url });
-      });
-      tabsIdUrl.sort((a, b) => {
-        return a.url > b.url ? 1 : -1;
-      });
-      chrome.tabs.move(
-        tabsIdUrl.map((tab) => tab.id),
-        { index: 0 }
-      );
+    const tabs = isOverWindows
+      ? await getAllTabs()
+      : await getTabsOnActiveWindow();
+    tabs.map((tab) => {
+      const url = tab.url;
+      const id = tab.id;
+      tabsIdUrl.push({ id, url });
     });
+    tabsIdUrl.sort((a, b) => {
+      return a.url > b.url ? 1 : -1;
+    });
+    chrome.tabs.move(
+      tabsIdUrl.map((tab) => tab.id),
+      { index: 0 }
+    );
   });
 
-  document.getElementById('normal_action').addEventListener('mouseover', () => {
-    const isOverWindows = document.getElementById('target_all_windows').checked;
-    const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    chrome.tabs.query(windowQuery, (tabs) => {
+  document
+    .getElementById('normal_action')
+    .addEventListener('mouseover', async () => {
+      const isOverWindows =
+        document.getElementById('target_all_windows').checked;
+      const tabs = isOverWindows
+        ? await getAllTabs()
+        : await getTabsOnActiveWindow();
+
       const urlCounter = {};
       const urlTitleDictionary = {};
       tabs.map((currentTab) => {
@@ -128,7 +139,6 @@ const addEventListeners = () => {
       });
       normalButton.title = titleString;
     });
-  });
 };
 
 initLanguage();
