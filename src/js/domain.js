@@ -31,19 +31,20 @@ export const initDomainButton = async () => {
     const parent = document.getElementById('domains');
     parent.appendChild(button);
 
-    document.getElementById(domain).addEventListener('click', () => {
+    document.getElementById(domain).addEventListener('click', async () => {
       const newHistoryFactors = {};
-      chrome.tabs.query({}, (tabs) => {
-        tabs.map((currentTab) => {
-          const currentTabUrl = new URL(currentTab.url);
-          if (currentTabUrl.hostname === domain) {
-            chrome.tabs.remove(currentTab.id);
-            newHistoryFactors[currentTab.url] = currentTab.title;
-          }
-        });
-        // remove button
-        document.getElementById(domain).remove();
+
+      const allTabs = await getAllTabs();
+      allTabs.map((currentTab) => {
+        const currentTabUrl = new URL(currentTab.url);
+        if (currentTabUrl.hostname === domain) {
+          chrome.tabs.remove(currentTab.id);
+          newHistoryFactors[currentTab.url] = currentTab.title;
+        }
       });
+      // remove button
+      document.getElementById(domain).remove();
+
       addHistory(newHistoryFactors);
     });
   }
