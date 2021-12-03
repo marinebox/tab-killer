@@ -31,7 +31,7 @@ const addEventListeners = () => {
     .getElementById('normal_action')
     .addEventListener('click', async () => {
       const isOverWindows =
-        document.getElementById('target_all_windows').checked;
+        (await getSyncStorage('tabKillerIsOverWindows')) || false;
       const windowQuery = isOverWindows ? {} : { currentWindow: true };
 
       const whiteList = (await getSyncStorage('whiteList')) || [];
