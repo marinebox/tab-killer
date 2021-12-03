@@ -60,8 +60,16 @@ const placeholderIdsWord = new Map([
 ]);
 
 export const initLanguage = async () => {
-  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
-  document.getElementById(`lang_${language}`).classList.add('is-active');
+  const languageConfigOnStorage =
+    (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  document
+    .getElementById(`lang_${languageConfigOnStorage}`)
+    .classList.add('is-active');
+
+  const language =
+    languageConfigOnStorage === 'auto'
+      ? chrome.i18n.getUILanguage()
+      : languageConfigOnStorage;
 
   // translate
   translateIdWord.forEach((value, key) => {
