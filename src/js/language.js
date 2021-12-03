@@ -83,8 +83,8 @@ const switchDropdownActiveItems = (element) => {
   for (const item of items) {
     if (element.id === item.id) {
       item.classList.add('is-active');
-      const lang = item.id.replace('lang_', '');
-      chrome.storage.local.set({ tabKillerLanguage: lang });
+      const language = item.id.replace('lang_', '');
+      chrome.storage.local.set({ tabKillerLanguage: language });
       initLanguage();
     } else {
       item.classList.remove('is-active');

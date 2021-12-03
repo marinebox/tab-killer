@@ -134,9 +134,9 @@ const deleteWhiteList = async (buttonElement) => {
 };
 
 const allClear = async () => {
-  const lang = (await getLocalStorage('tabKillerLanguage')) || 'ja';
+  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
   const confirmMessage =
-    lang === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
+    language === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
   const isDelete = confirm(confirmMessage);
 
   if (isDelete) {
