@@ -60,7 +60,9 @@ const placeholderIdsWord = new Map([
 ]);
 
 export const initLanguage = async () => {
-  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
+  const defaultLanguage = chrome.i18n.getUILanguage();
+  const language =
+    (await getLocalStorage('tabKillerLanguage')) || defaultLanguage;
   document.getElementById(`lang_${language}`).classList.add('is-active');
 
   // translate
@@ -83,7 +85,10 @@ const switchDropdownActiveItems = (element) => {
   for (const item of items) {
     if (element.id === item.id) {
       item.classList.add('is-active');
-      const language = item.id.replace('lang_', '');
+      const languageConfig = item.id.replace('lang_', '');
+      const defaultLanguage = chrome.i18n.getUILanguage();
+      const language =
+        languageConfig === 'auto' ? defaultLanguage : languageConfig;
       chrome.storage.local.set({ tabKillerLanguage: language });
       initLanguage();
     } else {
