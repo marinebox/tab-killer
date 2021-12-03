@@ -40,6 +40,6 @@ export const getTabsOnActiveWindow = () =>
 export const getCurrentTab = () =>
   new Promise((resolve) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) =>
-      resolve(tabs)
+      resolve(tabs[0])
     );
   });
