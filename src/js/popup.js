@@ -4,18 +4,14 @@ import { initDomainButton } from './domain.js';
 import { addHistory, setHistoryEventListeners } from './history.js';
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
+import { getSyncStorage } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
-const initKillOverWindow = () => {
-  chrome.storage.sync.get('tabKillerIsOverWindows', (items) => {
-    const isKillOverWindow =
-      items.tabKillerIsOverWindows === undefined
-        ? false
-        : items.tabKillerIsOverWindows;
-
-    chrome.storage.sync.set({ tabKillerIsOverWindows: isKillOverWindow });
-    document.getElementById('target_all_windows').checked = isKillOverWindow;
-  });
+const initKillOverWindow = async () => {
+  const isKillOverWindow =
+    (await getSyncStorage('tabKillerIsOverWindows')) || false;
+  chrome.storage.sync.set({ tabKillerIsOverWindows: isKillOverWindow });
+  document.getElementById('target_all_windows').checked = isKillOverWindow;
 };
 
 const addEventListeners = () => {
@@ -31,12 +27,14 @@ const addEventListeners = () => {
   });
 
   // delete duplicate tabs event
-  document.getElementById('normal_action').addEventListener('click', () => {
-    const isOverWindows = document.getElementById('target_all_windows').checked;
-    const windowQuery = isOverWindows ? {} : { currentWindow: true };
-    chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-      const whiteList =
-        items.tabKillerWhiteList === undefined ? [] : items.tabKillerWhiteList;
+  document
+    .getElementById('normal_action')
+    .addEventListener('click', async () => {
+      const isOverWindows =
+        (await getSyncStorage('tabKillerIsOverWindows')) || false;
+      const windowQuery = isOverWindows ? {} : { currentWindow: true };
+
+      const whiteList = (await getSyncStorage('whiteList')) || [];
       chrome.tabs.query(windowQuery, (tabs) => {
         tabs.map((currentTab, index) => {
           tabs
@@ -48,7 +46,6 @@ const addEventListeners = () => {
         });
       });
     });
-  });
 
   // keyword delete tabs event
   document.getElementById('designate_delete').addEventListener('click', () => {

@@ -1,5 +1,7 @@
 'use strict';
 
+import { getLocalStorage } from './utils.js';
+
 const translateIdWord = new Map([
   [
     'target_all_windows_label',
@@ -57,31 +59,21 @@ const placeholderIdsWord = new Map([
   ['designate', { en: 'URL keyword', ja: '消したいURL内のキーワード' }],
 ]);
 
-export const initLanguage = () => {
-  chrome.storage.local.get('tabKillerLanguage', (items) => {
-    // 設定されていなければ日本語にする
-    if (items.tabKillerLanguage === undefined) {
-      document.getElementById('lang_ja').classList.add('is-active');
-      return;
-    }
+export const initLanguage = async () => {
+  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
+  document.getElementById(`lang_${language}`).classList.add('is-active');
 
-    const language = items.tabKillerLanguage;
-    document.getElementById(`lang_${language}`).classList.add('is-active');
+  // translate
+  translateIdWord.forEach((value, key) => {
+    const element = document.getElementById(key);
+    if (element === null) return;
+    element.innerText = value[language];
+  });
+  placeholderIdsWord.forEach((value, key) => {
+    const element = document.getElementById(key);
+    if (element === null) return;
 
-    // insert english
-    translateIdWord.forEach((value, key) => {
-      const element = document.getElementById(key);
-      if (element === null) return;
-
-      element.innerText = value[language];
-    });
-
-    placeholderIdsWord.forEach((value, key) => {
-      const element = document.getElementById(key);
-      if (element === null) return;
-
-      element.placeholder = value[language];
-    });
+    element.placeholder = value[language];
   });
 };
 
@@ -91,8 +83,8 @@ const switchDropdownActiveItems = (element) => {
   for (const item of items) {
     if (element.id === item.id) {
       item.classList.add('is-active');
-      const lang = item.id.replace('lang_', '');
-      chrome.storage.local.set({ tabKillerLanguage: lang });
+      const language = item.id.replace('lang_', '');
+      chrome.storage.local.set({ tabKillerLanguage: language });
       initLanguage();
     } else {
       item.classList.remove('is-active');

@@ -1,5 +1,7 @@
 'use strict';
 
+import { getLocalStorage, getSyncStorage } from './utils.js';
+
 export const setWhiteListEventListeners = () => {
   // add white list event
   document
@@ -29,14 +31,11 @@ export const setWhiteListEventListeners = () => {
   allClearButton.addEventListener('click', allClear);
 };
 
-export const initWhiteList = () => {
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    if (items.tabKillerWhiteList === undefined) return;
-
-    for (const whiteURL of items.tabKillerWhiteList) {
-      createWhiteListBadge(whiteURL);
-    }
-  });
+export const initWhiteList = async () => {
+  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  for (const whiteURL of whiteListOnStorage) {
+    createWhiteListBadge(whiteURL);
+  }
 };
 
 const addWhiteList = async () => {
@@ -50,7 +49,9 @@ const addWhiteList = async () => {
     return;
   }
 
-  const isDuplicate = await isDuplicateUrlOnStorage(addingUrl);
+  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const isDuplicate = whiteListOnStorage.includes(addingUrl);
+
   if (isDuplicate) {
     alert('already exists');
     return;
@@ -67,7 +68,10 @@ const addPresentUrlWhiteList = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     const presentURL = new URL(tabs[0].url);
 
-    const isDuplicate = await isDuplicateUrlOnStorage(presentURL.href);
+    const whiteListOnStorage =
+      (await getSyncStorage('tabKillerWhiteList')) || [];
+    const isDuplicate = whiteListOnStorage.includes(presentURL.href);
+
     if (isDuplicate) {
       alert('already exists');
       return;
@@ -82,7 +86,9 @@ const addPresentDomainWhiteList = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
     const presentURL = new URL(tabs[0].url);
 
-    const isDuplicate = await isDuplicateUrlOnStorage(presentURL.hostname);
+    const whiteListOnStorage =
+      (await getSyncStorage('tabKillerWhiteList')) || [];
+    const isDuplicate = whiteListOnStorage.includes(presentURL.hostname);
     if (isDuplicate) {
       alert('already exists');
       return;
@@ -109,53 +115,33 @@ const createWhiteListBadge = (addingUrl) => {
   whiteListBoardElement.appendChild(newWhiteElement);
 };
 
-const addWhiteListStorage = (addingUrl) => {
+const addWhiteListStorage = async (addingUrl) => {
   // add new URL white list on storage
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    const whiteListOnStorage = items.tabKillerWhiteList;
-    const newWhiteList =
-      whiteListOnStorage === undefined ? [] : whiteListOnStorage;
-    newWhiteList.push(addingUrl);
-    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
-  });
+  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const newWhiteList = [...whiteListOnStorage, addingUrl];
+  chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
 };
 
-const deleteWhiteList = (buttonElement) => {
+const deleteWhiteList = async (buttonElement) => {
   const parent = buttonElement.parentElement;
   parent.remove();
 
   // delete URL on the whitelist and renew storage
   const deleteURL = parent.id;
-  chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-    const whiteListOnStorage = items.tabKillerWhiteList;
-    const newWhiteList =
-      whiteListOnStorage === undefined
-        ? []
-        : whiteListOnStorage.filter((whiteURL) => whiteURL !== deleteURL);
-    chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
-  });
+  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const newWhiteList = whiteListOnStorage.filter((url) => url !== deleteURL);
+  chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
 };
 
-const allClear = () => {
-  chrome.storage.local.get('tabKillerLanguage', (items) => {
-    const lang = items.tabKillerLanguage;
-    const confirmMessage =
-      lang === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
-    const isDelete = confirm(confirmMessage);
+const allClear = async () => {
+  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
+  const confirmMessage =
+    language === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
+  const isDelete = confirm(confirmMessage);
 
-    if (isDelete) {
-      chrome.storage.sync.set({ tabKillerWhiteList: [] });
-      const whiteListBoardElement = document.getElementById('white_list');
-      whiteListBoardElement.innerHTML = '';
-    }
-  });
-};
-
-const isDuplicateUrlOnStorage = (urlString) => {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get('tabKillerWhiteList', (items) => {
-      const whiteListOnStorage = items.tabKillerWhiteList || [];
-      return resolve(whiteListOnStorage.includes(urlString));
-    });
-  });
+  if (isDelete) {
+    chrome.storage.sync.set({ tabKillerWhiteList: [] });
+    const whiteListBoardElement = document.getElementById('white_list');
+    whiteListBoardElement.innerHTML = '';
+  }
 };
