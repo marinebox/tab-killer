@@ -17,26 +17,42 @@ export const initHistory = async () => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
   if (history.length === 0) return;
 
-  const historyList = document.getElementById('history_list');
-  historyList.innerHTML = '';
+  const historyListElementUl = document.getElementById('history_list');
+  historyListElementUl.innerHTML = '';
 
   for (const historyFactor of history.reverse()) {
-    const newHistoryElement = document.createElement('li');
-    const historyLink = document.createElement('a');
-    historyLink.href = historyFactor.url;
+    const newHistoryElementLi = document.createElement('li');
+    newHistoryElementLi.className =
+      'is-flex is-align-items-center is-justify-content-space-between px-3';
+
+    const LinkElementA = document.createElement('a');
+    LinkElementA.href = historyFactor.url;
     const title = historyFactor.title;
     const hasTooltip = title.length >= 50;
 
     // if title is too long, show tooltip
     if (hasTooltip) {
-      newHistoryElement.dataset.tooltip = title;
+      newHistoryElementLi.dataset.tooltip = title;
     }
 
-    historyLink.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
-    historyLink.target = '_blank';
+    // <a>を<li>に追加
+    LinkElementA.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
+    LinkElementA.target = '_blank';
+    LinkElementA.className = 'is-flex-grow-1';
+    newHistoryElementLi.appendChild(LinkElementA);
 
-    newHistoryElement.appendChild(historyLink);
-    historyList.appendChild(newHistoryElement);
+    // <li>を<button>に追加
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete';
+    newHistoryElementLi.appendChild(deleteButton);
+
+    // <li>を<ul>に追加
+    historyListElementUl.appendChild(newHistoryElementLi);
+
+    // delete button event listener
+    deleteButton.addEventListener('click', () => {
+      deleteHistory(historyFactor);
+    });
   }
 };
 
@@ -53,6 +69,14 @@ export const addHistory = async (newHistoryFactors) => {
     history.shift();
   }
   chrome.storage.local.set({ tabKillerHistory: history });
+};
+
+const deleteHistory = async (historyFactor) => {
+  const history = (await getLocalStorage('tabKillerHistory')) || [];
+  history.splice(history.indexOf(historyFactor), 1);
+  chrome.storage.local.set({ tabKillerHistory: history });
+
+  await initHistory();
 };
 
 const allClear = async () => {
