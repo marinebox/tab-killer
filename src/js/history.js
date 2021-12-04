@@ -13,26 +13,29 @@ export const initHistory = async () => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
   if (history.length === 0) return;
 
-  const historyList = document.getElementById('history_list');
-  historyList.innerHTML = '';
+  const historyListElementUl = document.getElementById('history_list');
+  historyListElementUl.innerHTML = '';
 
   for (const historyFactor of history.reverse()) {
-    const newHistoryElement = document.createElement('li');
-    const historyLink = document.createElement('a');
-    historyLink.href = historyFactor.url;
+    const newHistoryElementLi = document.createElement('li');
+    const LinkElementA = document.createElement('a');
+    LinkElementA.href = historyFactor.url;
     const title = historyFactor.title;
     const hasTooltip = title.length >= 50;
 
     // if title is too long, show tooltip
     if (hasTooltip) {
-      newHistoryElement.dataset.tooltip = title;
+      newHistoryElementLi.dataset.tooltip = title;
     }
 
-    historyLink.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
-    historyLink.target = '_blank';
+    LinkElementA.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
+    LinkElementA.target = '_blank';
 
-    newHistoryElement.appendChild(historyLink);
-    historyList.appendChild(newHistoryElement);
+    // <a>を<li>に追加
+    newHistoryElementLi.appendChild(LinkElementA);
+
+    // <li>を<ul>に追加
+    historyListElementUl.appendChild(newHistoryElementLi);
   }
 };
 
