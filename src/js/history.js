@@ -7,6 +7,10 @@ export const setHistoryEventListeners = () => {
   document.getElementById('screen_history').addEventListener('click', () => {
     initHistory();
   });
+
+  // all clear event
+  const allClearButton = document.getElementById('history_all_clear_button');
+  allClearButton.addEventListener('click', allClear);
 };
 
 export const initHistory = async () => {
@@ -49,4 +53,16 @@ export const addHistory = async (newHistoryFactors) => {
     history.shift();
   }
   chrome.storage.local.set({ tabKillerHistory: history });
+};
+
+const allClear = async () => {
+  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
+  const confirmMessage =
+    language === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
+  const isDelete = confirm(confirmMessage);
+  if (isDelete) {
+    chrome.storage.local.set({ tabKillerHistory: [] });
+    const historyListBoardElement = document.getElementById('history_list');
+    historyListBoardElement.innerHTML = '';
+  }
 };
