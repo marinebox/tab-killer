@@ -58,7 +58,7 @@ export const addHistory = async (newHistoryFactors) => {
 const allClear = async () => {
   const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
   const confirmMessage =
-    language === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
+    language === 'ja' ? '本当にすべて削除しますか？' : 'Are you sure you want to delete all history?';
   const isDelete = confirm(confirmMessage);
   if (isDelete) {
     chrome.storage.local.set({ tabKillerHistory: [] });
