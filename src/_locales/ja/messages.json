@@ -1,0 +1,8 @@
+{
+  "appName": {
+    "message": "tab-killer"
+  },
+  "appDescription": {
+    "message": "重複タブを閉じるなど、タブを管理する拡張機能"
+  }
+}
