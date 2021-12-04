@@ -27,6 +27,7 @@ export const setWhiteListEventListeners = () => {
     );
   }
 
+  // all clear event
   const allClearButton = document.getElementById('white_list_all_clear_button');
   allClearButton.addEventListener('click', allClear);
 };
