@@ -7,6 +7,10 @@ export const setHistoryEventListeners = () => {
   document.getElementById('screen_history').addEventListener('click', () => {
     initHistory();
   });
+
+  // all clear event
+  const allClearButton = document.getElementById('history_all_clear_button');
+  allClearButton.addEventListener('click', allClear);
 };
 
 export const initHistory = async () => {
@@ -73,4 +77,18 @@ const deleteHistory = async (historyFactor) => {
   chrome.storage.local.set({ tabKillerHistory: history });
 
   await initHistory();
+};
+
+const allClear = async () => {
+  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
+  const confirmMessage =
+    language === 'ja'
+      ? '本当にすべて削除しますか？'
+      : 'Are you sure you want to delete all history?';
+  const isDelete = confirm(confirmMessage);
+  if (isDelete) {
+    chrome.storage.local.set({ tabKillerHistory: [] });
+    const historyListBoardElement = document.getElementById('history_list');
+    historyListBoardElement.innerHTML = '';
+  }
 };
