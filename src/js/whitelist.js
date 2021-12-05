@@ -1,5 +1,6 @@
 'use strict';
 
+import { translateConfirmWord } from './language.js';
 import { getCurrentTab, getLocalStorage, getSyncStorage } from './utils.js';
 
 export const setWhiteListEventListeners = () => {
@@ -131,9 +132,12 @@ const deleteWhiteList = async (buttonElement) => {
 };
 
 const allClear = async () => {
-  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
-  const confirmMessage =
-    language === 'ja' ? '本当にすべて削除しますか？' : 'Can I delete All?';
+  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  const language =
+    languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
+  const confirmMessage = translateConfirmWord.get('whiteListAllClearConfirm')[
+    language
+  ];
   const isDelete = confirm(confirmMessage);
 
   if (isDelete) {

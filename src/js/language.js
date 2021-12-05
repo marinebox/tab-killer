@@ -59,6 +59,23 @@ const placeholderIdsWord = new Map([
   ['designate', { en: 'URL keyword', ja: '消したいURL内のキーワード' }],
 ]);
 
+export const translateConfirmWord = new Map([
+  [
+    'historyAllClearConfirm',
+    {
+      en: 'Are you sure you want to delete all history?',
+      ja: '本当にすべて削除しますか？',
+    },
+  ],
+  [
+    'whiteListAllClearConfirm',
+    {
+      en: 'Are you sure you want to delete all whitelist?',
+      ja: '本当にすべて削除しますか？',
+    },
+  ],
+]);
+
 export const initLanguage = async () => {
   const languageConfigOnStorage =
     (await getLocalStorage('tabKillerLanguage')) || 'auto';
