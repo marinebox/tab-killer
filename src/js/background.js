@@ -1,22 +1,23 @@
 'use strict';
 
-const tabCount = () => {
+import { getAllTabs } from './utils.js';
+
+const tabCount = async () => {
   const tabUrlCounter = {};
 
-  chrome.tabs.query({}, (tabs) => {
-    tabs.forEach((tab) => {
-      const url = tab.url;
-      tabUrlCounter[url] = (tabUrlCounter[url] || 0) + 1;
-    });
+  const allTabs = await getAllTabs();
+  allTabs.forEach((tab) => {
+    const url = tab.url;
+    tabUrlCounter[url] = (tabUrlCounter[url] || 0) + 1;
+  });
 
-    const duplicatedTabNum = Object.values(tabUrlCounter).reduce(
-      (prev, current) => prev + current - 1,
-      0
-    );
+  const duplicatedTabNum = Object.values(tabUrlCounter).reduce(
+    (prev, current) => prev + current - 1,
+    0
+  );
 
-    chrome.action.setBadgeText({
-      text: duplicatedTabNum > 0 ? duplicatedTabNum.toString() : '',
-    });
+  chrome.action.setBadgeText({
+    text: duplicatedTabNum > 0 ? duplicatedTabNum.toString() : '',
   });
 };
 
