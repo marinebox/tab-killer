@@ -1,5 +1,6 @@
 'use strict';
 
+import { translateConfirmWord } from './language.js';
 import { getLocalStorage } from './utils.js';
 
 export const setHistoryEventListeners = () => {
@@ -80,11 +81,12 @@ const deleteHistory = async (historyFactor) => {
 };
 
 const allClear = async () => {
-  const language = (await getLocalStorage('tabKillerLanguage')) || 'ja';
-  const confirmMessage =
-    language === 'ja'
-      ? '本当にすべて削除しますか？'
-      : 'Are you sure you want to delete all history?';
+  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  const language =
+    languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
+  const confirmMessage = translateConfirmWord.get('historyAllClearConfirm')[
+    language
+  ];
   const isDelete = confirm(confirmMessage);
   if (isDelete) {
     chrome.storage.local.set({ tabKillerHistory: [] });
