@@ -36,10 +36,16 @@ export const initHistory = async () => {
       newHistoryElementLi.dataset.tooltip = title;
     }
 
+    // faviconを<li>に追加
+    const faviconElementImg = document.createElement('img');
+    faviconElementImg.src =
+      'http://favicon.hatena.ne.jp/?url=' + historyFactor.url;
+    newHistoryElementLi.appendChild(faviconElementImg);
+
     // <a>を<li>に追加
     LinkElementA.innerHTML = hasTooltip ? title.slice(0, 50) + '...' : title;
     LinkElementA.target = '_blank';
-    LinkElementA.className = 'is-flex-grow-1';
+    LinkElementA.className = 'is-flex-grow-1 mx-1';
     newHistoryElementLi.appendChild(LinkElementA);
 
     // <li>を<button>に追加
