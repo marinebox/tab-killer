@@ -75,7 +75,6 @@ const deleteHistory = async (historyFactor) => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
   history.splice(history.indexOf(historyFactor), 1);
 
-  console.log(history);
   chrome.storage.local.set({ tabKillerHistory: history });
 
   await initHistory();
