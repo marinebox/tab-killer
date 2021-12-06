@@ -74,7 +74,6 @@ export const addHistory = async (newHistoryFactors) => {
 const deleteHistory = async (historyFactor) => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
   history.splice(history.indexOf(historyFactor), 1);
-
   chrome.storage.local.set({ tabKillerHistory: history });
 
   await initHistory();
