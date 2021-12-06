@@ -16,7 +16,6 @@ export const setHistoryEventListeners = () => {
 
 export const initHistory = async () => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
-  if (history.length === 0) return;
 
   const historyListElementUl = document.getElementById('history_list');
   historyListElementUl.innerHTML = '';
