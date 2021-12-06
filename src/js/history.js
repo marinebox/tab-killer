@@ -16,7 +16,6 @@ export const setHistoryEventListeners = () => {
 
 export const initHistory = async () => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
-  if (history.length === 0) return;
 
   const historyListElementUl = document.getElementById('history_list');
   historyListElementUl.innerHTML = '';
@@ -75,6 +74,8 @@ export const addHistory = async (newHistoryFactors) => {
 const deleteHistory = async (historyFactor) => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
   history.splice(history.indexOf(historyFactor), 1);
+
+  console.log(history);
   chrome.storage.local.set({ tabKillerHistory: history });
 
   await initHistory();
