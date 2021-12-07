@@ -1,7 +1,4 @@
 {
-  "appName": {
-    "message": "tab-killer"
-  },
   "appDescription": {
     "message": "A chrome extension for closing duplicate tabs, and so on."
   }
