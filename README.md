@@ -1,4 +1,4 @@
-# ![origin](src/images/48icon.png) tab-killer 1.1.0
+# ![origin](src/images/48icon.png) tab-killer 1.2.0
 
 **Close all duplicate tubs**
 
