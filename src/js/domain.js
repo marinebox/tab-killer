@@ -1,10 +1,11 @@
 'use strict';
 
 import { addHistory } from './history.js';
-import { getAllTabs } from './utils.js';
+import { getAllTabs, getTabsOnActiveWindow, getSyncStorage } from './utils.js';
 
 export const initDomainButton = async () => {
-  const allTabs = await getAllTabs();
+  const isOverWindows = (await getSyncStorage('tabKillerIsOverWindows')) || false;
+  const allTabs = isOverWindows ? await getAllTabs() : await getTabsOnActiveWindow();
 
   // extract the domains
   const tabUrlCounter = {};
@@ -21,6 +22,8 @@ export const initDomainButton = async () => {
   // set button
   const domains = Object.keys(tabUrlCounter);
   domains.sort();
+  const parent = document.getElementById('domains');
+  parent.innerHTML = '';
   for (const domain of domains) {
     const cnt = tabUrlCounter[domain];
 
@@ -36,7 +39,6 @@ export const initDomainButton = async () => {
     button.appendChild(faviconElementImg);
     button.innerHTML = button.innerHTML + '&nbsp;' + domain + ' (' + cnt + ')';
 
-    const parent = document.getElementById('domains');
     parent.appendChild(button);
 
     document.getElementById(domain).addEventListener('click', async () => {
