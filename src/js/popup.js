@@ -20,10 +20,11 @@ const addEventListeners = () => {
   setHistoryEventListeners();
   setScreenSwitchEventListeners();
 
-  // checkbox event
+  // checkbox event, and recreate domains button
   const checkElement = document.getElementById('target_all_windows');
   checkElement.addEventListener('change', () => {
     chrome.storage.sync.set({ tabKillerIsOverWindows: checkElement.checked });
+    initDomainButton();
   });
 
   // delete duplicate tabs event
