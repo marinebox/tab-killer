@@ -23,10 +23,18 @@ export const initDomainButton = async () => {
   domains.sort();
   for (const domain of domains) {
     const cnt = tabUrlCounter[domain];
+
+    // faviconを<li>に追加
+    const faviconElementImg = document.createElement('img');
+    faviconElementImg.src =
+      'http://www.google.com/s2/favicons?domain=' + domain;
+
     const button = document.createElement('button');
     button.className = 'button is-link is-outlined';
     button.id = domain;
-    button.innerHTML = domain + ' (' + cnt + ')';
+
+    button.appendChild(faviconElementImg);
+    button.innerHTML = button.innerHTML + '&nbsp;' + domain + ' (' + cnt + ')';
 
     const parent = document.getElementById('domains');
     parent.appendChild(button);
