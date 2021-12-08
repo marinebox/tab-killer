@@ -1,6 +1,9 @@
 'use strict';
 
-import { getAllTabs } from './utils.js';
+const getAllTabs = () =>
+  new Promise((resolve) => {
+    chrome.tabs.query({}, (tabs) => resolve(tabs));
+  });
 
 const tabCount = async () => {
   const tabUrlCounter = {};
