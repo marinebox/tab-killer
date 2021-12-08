@@ -1,7 +1,7 @@
 {
   "name": "tab-killer",
   "description": "__MSG_appDescription__",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "default_locale": "en",
   "manifest_version": 3,
 
@@ -10,8 +10,7 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "service_worker": "js/background.js",
-    "type": "module"
+    "service_worker": "js/background.js"
   },
   "permissions": ["tabs", "storage"],
 
