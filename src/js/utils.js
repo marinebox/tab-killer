@@ -11,7 +11,7 @@ export const getLocalStorage = (key = null) =>
 
 /**
  * @param  {string} key
- * @param  {string} value
+ * @param  {Object} value
  * @return {Promise} local storage object
  */
 export const setLocalStorage = (key, value) =>
@@ -21,7 +21,7 @@ export const setLocalStorage = (key, value) =>
 
 /**
  * @param  {string} key
- * @param  {string} value
+ * @param  {Object} value
  * @return {Promise} sync storage object
  */
 export const setSyncStorage = (key, value) =>
