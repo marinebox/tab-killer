@@ -1,7 +1,12 @@
 'use strict';
 
 import { translateConfirmWord } from './language.js';
-import { getCurrentTab, getLocalStorage, getSyncStorage } from './utils.js';
+import {
+  getCurrentTab,
+  getLocalStorage,
+  getSyncStorage,
+  setSyncStorage,
+} from './utils.js';
 
 export const setWhiteListEventListeners = () => {
   // add white list event
@@ -117,7 +122,7 @@ const addWhiteListStorage = async (addingUrl) => {
   // add new URL white list on storage
   const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
   const newWhiteList = [...whiteListOnStorage, addingUrl];
-  chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
+  setSyncStorage('tabKillerWhiteList', newWhiteList);
 };
 
 const deleteWhiteList = async (buttonElement) => {
@@ -128,7 +133,7 @@ const deleteWhiteList = async (buttonElement) => {
   const deleteURL = parent.id;
   const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
   const newWhiteList = whiteListOnStorage.filter((url) => url !== deleteURL);
-  chrome.storage.sync.set({ tabKillerWhiteList: newWhiteList });
+  setSyncStorage('tabKillerWhiteList', newWhiteList);
 };
 
 const allClear = async () => {
@@ -141,7 +146,7 @@ const allClear = async () => {
   const isDelete = confirm(confirmMessage);
 
   if (isDelete) {
-    chrome.storage.sync.set({ tabKillerWhiteList: [] });
+    setSyncStorage('tabKillerWhiteList', []);
     const whiteListBoardElement = document.getElementById('white_list');
     whiteListBoardElement.innerHTML = '';
   }

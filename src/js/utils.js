@@ -11,6 +11,26 @@ export const getLocalStorage = (key = null) =>
 
 /**
  * @param  {string} key
+ * @param  {Object} value
+ * @return {Promise} local storage object
+ */
+export const setLocalStorage = (key, value) =>
+  new Promise((resolve) => {
+    chrome.storage.local.set({ [key]: value }, () => resolve());
+  });
+
+/**
+ * @param  {string} key
+ * @param  {Object} value
+ * @return {Promise} sync storage object
+ */
+export const setSyncStorage = (key, value) =>
+  new Promise((resolve) => {
+    chrome.storage.sync.set({ [key]: value }, () => resolve());
+  });
+
+/**
+ * @param  {string} key
  * @return {Promise} sync storage object
  */
 export const getSyncStorage = (key = null) =>

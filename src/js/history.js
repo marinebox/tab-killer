@@ -1,7 +1,7 @@
 'use strict';
 
 import { translateConfirmWord } from './language.js';
-import { getLocalStorage } from './utils.js';
+import { getLocalStorage, setLocalStorage } from './utils.js';
 
 export const setHistoryEventListeners = () => {
   // make history list when history tab clicked
@@ -74,15 +74,15 @@ export const addHistory = async (newHistoryFactors) => {
   while (history.length > 50) {
     history.shift();
   }
-  chrome.storage.local.set({ tabKillerHistory: history });
+  setLocalStorage('tabKillerHistory', history);
 };
 
 const deleteHistory = async (historyFactor) => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
   history.splice(history.indexOf(historyFactor), 1);
-  chrome.storage.local.set({ tabKillerHistory: history });
+  await setLocalStorage('tabKillerHistory', history);
 
-  await initHistory();
+  initHistory();
 };
 
 const allClear = async () => {
@@ -94,7 +94,7 @@ const allClear = async () => {
   ];
   const isDelete = confirm(confirmMessage);
   if (isDelete) {
-    chrome.storage.local.set({ tabKillerHistory: [] });
+    setLocalStorage('tabKillerHistory', []);
     const historyListBoardElement = document.getElementById('history_list');
     historyListBoardElement.innerHTML = '';
   }
