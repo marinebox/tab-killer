@@ -4,13 +4,18 @@ import { initDomainButton } from './domain.js';
 import { addHistory, setHistoryEventListeners } from './history.js';
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
-import { getAllTabs, getSyncStorage, getTabsOnActiveWindow } from './utils.js';
+import {
+  getAllTabs,
+  getSyncStorage,
+  getTabsOnActiveWindow,
+  setSyncStorage,
+} from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
 const initKillOverWindow = async () => {
   const isKillOverWindow =
     (await getSyncStorage('tabKillerIsOverWindows')) || false;
-  chrome.storage.sync.set({ tabKillerIsOverWindows: isKillOverWindow });
+  setSyncStorage('tabKillerIsOverWindows', isKillOverWindow);
   document.getElementById('target_all_windows').checked = isKillOverWindow;
 };
 
@@ -22,8 +27,8 @@ const addEventListeners = () => {
 
   // checkbox event, and recreate domains button
   const checkElement = document.getElementById('target_all_windows');
-  checkElement.addEventListener('change', () => {
-    chrome.storage.sync.set({ tabKillerIsOverWindows: checkElement.checked });
+  checkElement.addEventListener('change', async () => {
+    await setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
     initDomainButton();
   });
 

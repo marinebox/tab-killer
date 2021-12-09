@@ -1,6 +1,6 @@
 'use strict';
 
-import { getLocalStorage } from './utils.js';
+import { getLocalStorage, setLocalStorage } from './utils.js';
 
 const translateIdWord = new Map([
   [
@@ -102,14 +102,14 @@ export const initLanguage = async () => {
   });
 };
 
-const switchDropdownActiveItems = (element) => {
+const switchDropdownActiveItems = async (element) => {
   const items = document.getElementsByClassName('language_dropdown_item');
 
   for (const item of items) {
     if (element.id === item.id) {
       item.classList.add('is-active');
       const language = item.id.replace('lang_', '');
-      chrome.storage.local.set({ tabKillerLanguage: language });
+      await setLocalStorage('tabKillerLanguage', language);
       initLanguage();
     } else {
       item.classList.remove('is-active');
