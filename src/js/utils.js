@@ -22,7 +22,7 @@ export const setLocalStorage = (key, value) =>
 /**
  * @param  {string} key
  * @param  {string} value
- * @return {Promise} local storage object
+ * @return {Promise} sync storage object
  */
 export const setSyncStorage = (key, value) =>
   new Promise((resolve) => {
