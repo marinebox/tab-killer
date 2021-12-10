@@ -148,8 +148,12 @@ const addEventListeners = () => {
     });
 };
 
-initLanguage();
-initKillOverWindow();
-initWhiteList();
-initDomainButton();
-addEventListeners();
+const initialize = () => {
+  initLanguage();
+  initKillOverWindow();
+  initWhiteList();
+  initDomainButton();
+  addEventListeners();
+}
+
+initialize();
