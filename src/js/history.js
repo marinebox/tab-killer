@@ -20,7 +20,7 @@ export const initHistory = async () => {
   const historyListElementUl = document.getElementById('history_list');
   historyListElementUl.innerHTML = '';
 
-  for (const historyFactor of history.reverse()) {
+  for (const [index, historyFactor] of history.reverse().entries()) {
     const newHistoryElementLi = document.createElement('li');
     newHistoryElementLi.className =
       'is-flex is-align-items-center is-justify-content-space-between px-3';
@@ -57,7 +57,7 @@ export const initHistory = async () => {
 
     // delete button event listener
     deleteButton.addEventListener('click', () => {
-      deleteHistory(historyFactor);
+      deleteHistory(history.length - index - 1);
     });
   }
 };
@@ -77,9 +77,9 @@ export const addHistory = async (newHistoryFactors) => {
   setLocalStorage('tabKillerHistory', history);
 };
 
-const deleteHistory = async (historyFactor) => {
+const deleteHistory = async (index) => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
-  history.splice(history.indexOf(historyFactor), 1);
+  history.splice(index, 1);
   await setLocalStorage('tabKillerHistory', history);
 
   initHistory();
