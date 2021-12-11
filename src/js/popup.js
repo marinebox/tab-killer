@@ -11,6 +11,7 @@ import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
   getAllTabs,
   getSyncStorage,
+  getTabs,
   getTabsOnActiveWindow,
   setSyncStorage,
 } from './utils.js';
@@ -30,25 +31,13 @@ const setCheckboxEventListener = () => {
   });
 };
 
-const addEventListeners = () => {
-  setLanguageEventListeners();
-  setWhiteListEventListeners();
-  setHistoryEventListeners();
-  setScreenSwitchEventListeners();
-
-  setCheckboxEventListener();
-
-  // delete duplicate tabs event
+const setDeleteDuplicateTabsEventListener = () => {
   document
     .getElementById('normal_action')
     .addEventListener('click', async () => {
-      const isOverWindows =
-        (await getSyncStorage('tabKillerIsOverWindows')) || false;
-      const tabs = isOverWindows
-        ? await getAllTabs()
-        : await getTabsOnActiveWindow();
-
+      const tabs = await getTabs();
       const whiteList = (await getSyncStorage('whiteList')) || [];
+
       tabs.map((currentTab, index) => {
         tabs
           .slice(index)
@@ -58,6 +47,17 @@ const addEventListeners = () => {
           .map((targetTab) => chrome.tabs.remove(targetTab.id));
       });
     });
+};
+
+const addEventListeners = () => {
+  setLanguageEventListeners();
+  setWhiteListEventListeners();
+  setHistoryEventListeners();
+  setScreenSwitchEventListeners();
+
+  setCheckboxEventListener();
+  setDeleteDuplicateTabsEventListener();
+  // delete duplicate tabs event
 
   // keyword delete tabs event
   document
