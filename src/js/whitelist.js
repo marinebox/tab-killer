@@ -64,7 +64,6 @@ const addWhiteList = async () => {
     return;
   }
 
-  createWhiteListBadge(addingUrl);
   addWhiteListStorage(addingUrl);
 
   // clear input
@@ -83,7 +82,6 @@ const addPresentUrlWhiteList = async () => {
     return;
   }
 
-  createWhiteListBadge(presentURL.href);
   addWhiteListStorage(presentURL.href);
 };
 
@@ -97,7 +95,7 @@ const addPresentDomainWhiteList = async () => {
     alert('already exists');
     return;
   }
-  createWhiteListBadge(presentURL.hostname);
+  
   addWhiteListStorage(presentURL.hostname);
 };
 

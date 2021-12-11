@@ -156,6 +156,7 @@ chrome.storage.onChanged.addListener((changes) => {
         initDomainButton();
         break;
       case 'tabKillerWhiteList':
+        initWhiteList();
         break;
       case 'tabKillerHistory':
         break;
