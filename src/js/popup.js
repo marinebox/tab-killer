@@ -14,6 +14,7 @@ import {
   getTabs,
   getTabsOnActiveWindow,
   setSyncStorage,
+  stringJudger,
 } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -49,32 +50,16 @@ const setDeleteDuplicateTabsEventListener = () => {
     });
 };
 
-const addEventListeners = () => {
-  setLanguageEventListeners();
-  setWhiteListEventListeners();
-  setHistoryEventListeners();
-  setScreenSwitchEventListeners();
-
-  setCheckboxEventListener();
-  setDeleteDuplicateTabsEventListener();
-  // delete duplicate tabs event
-
-  // keyword delete tabs event
+const setKeywordDeleteTabsEventListener = () => {
   document
     .getElementById('designate_delete')
     .addEventListener('click', async () => {
-      if (designatedURL === '') {
-        alert('空白を条件に指定することはできません。');
-        return;
-      }
-
-      const isOverWindows =
-        (await getSyncStorage('tabKillerIsOverWindows')) || false;
-      const tabs = isOverWindows
-        ? await getAllTabs()
-        : await getTabsOnActiveWindow();
+      const tabs = await getTabs();
       const designatedURL = document.getElementById('designate').value;
       const newHistoryFactors = {};
+      const stringJudgeResult = stringJudger(designatedURL);
+
+      if (!stringJudgeResult) return;
 
       tabs.map((currentTab) => {
         if (currentTab.url.match(designatedURL)) {
@@ -85,6 +70,17 @@ const addEventListeners = () => {
 
       addHistory(newHistoryFactors);
     });
+};
+
+const addEventListeners = () => {
+  setLanguageEventListeners();
+  setWhiteListEventListeners();
+  setHistoryEventListeners();
+  setScreenSwitchEventListeners();
+
+  setCheckboxEventListener();
+  setDeleteDuplicateTabsEventListener();
+  setKeywordDeleteTabsEventListener();
 
   // domain arrangement
   document.getElementById('range_tabs').addEventListener('click', async () => {
