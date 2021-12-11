@@ -72,24 +72,10 @@ const setKeywordDeleteTabsEventListener = () => {
     });
 };
 
-const addEventListeners = () => {
-  setLanguageEventListeners();
-  setWhiteListEventListeners();
-  setHistoryEventListeners();
-  setScreenSwitchEventListeners();
-
-  setCheckboxEventListener();
-  setDeleteDuplicateTabsEventListener();
-  setKeywordDeleteTabsEventListener();
-
-  // domain arrangement
+const setDomainArrangementEventListener = () => {
   document.getElementById('range_tabs').addEventListener('click', async () => {
     const tabsIdUrl = [];
-    const isOverWindows =
-      (await getSyncStorage('tabKillerIsOverWindows')) || false;
-    const tabs = isOverWindows
-      ? await getAllTabs()
-      : await getTabsOnActiveWindow();
+    const tabs = await getTabs();
     tabs.map((tab) => {
       const url = tab.url;
       const id = tab.id;
@@ -103,6 +89,18 @@ const addEventListeners = () => {
       { index: 0 }
     );
   });
+};
+
+const addEventListeners = () => {
+  setLanguageEventListeners();
+  setWhiteListEventListeners();
+  setHistoryEventListeners();
+  setScreenSwitchEventListeners();
+
+  setCheckboxEventListener();
+  setDeleteDuplicateTabsEventListener();
+  setKeywordDeleteTabsEventListener();
+  setDomainArrangementEventListener();
 
   document
     .getElementById('normal_action')
