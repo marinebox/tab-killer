@@ -55,6 +55,18 @@ export const getTabsOnActiveWindow = () =>
   });
 
 /**
+ * @returns {Promise<Array>} tabs object
+ */
+export const getTabs = async () => {
+  const isOverWindows =
+    (await getSyncStorage('tabKillerIsOverWindows')) || false;
+  const tabs = isOverWindows
+    ? await getAllTabs()
+    : await getTabsOnActiveWindow();
+  return tabs;
+};
+
+/**
  * @return {Promise<Object>} current tab
  */
 export const getCurrentTab = () =>
@@ -63,3 +75,19 @@ export const getCurrentTab = () =>
       resolve(tabs[0])
     );
   });
+
+/**
+ * @param {string} keyword
+ * @returns {Boolean} if keyword is correct, return true, else false
+ */
+export const stringJudger = (keyword) => {
+  if (keyword === '') {
+    alert('空白を条件に指定することはできません。');
+    return false;
+  } else if (keyword === '.' || keyword === '/' || keyword === ':') {
+    alert('無効な文字列です。');
+    return false;
+  } else {
+    return true;
+  }
+};
