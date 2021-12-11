@@ -80,9 +80,7 @@ export const addHistory = async (newHistoryFactors) => {
 const deleteHistory = async (index) => {
   const history = (await getLocalStorage('tabKillerHistory')) || [];
   history.splice(index, 1);
-  await setLocalStorage('tabKillerHistory', history);
-
-  initHistory();
+  setLocalStorage('tabKillerHistory', history);
 };
 
 const allClear = async () => {
@@ -95,7 +93,5 @@ const allClear = async () => {
   const isDelete = confirm(confirmMessage);
   if (isDelete) {
     setLocalStorage('tabKillerHistory', []);
-    const historyListBoardElement = document.getElementById('history_list');
-    historyListBoardElement.innerHTML = '';
   }
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 import { initDomainButton } from './domain.js';
-import { addHistory, setHistoryEventListeners } from './history.js';
+import { addHistory, initHistory, setHistoryEventListeners } from './history.js';
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
@@ -159,6 +159,7 @@ chrome.storage.onChanged.addListener((changes) => {
         initWhiteList();
         break;
       case 'tabKillerHistory':
+        initHistory();
         break;
       case 'tabKillerLanguage':
         initLanguage();
