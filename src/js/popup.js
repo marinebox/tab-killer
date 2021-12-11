@@ -91,34 +91,21 @@ const setDomainArrangementEventListener = () => {
   });
 };
 
-const addEventListeners = () => {
-  setLanguageEventListeners();
-  setWhiteListEventListeners();
-  setHistoryEventListeners();
-  setScreenSwitchEventListeners();
-
-  setCheckboxEventListener();
-  setDeleteDuplicateTabsEventListener();
-  setKeywordDeleteTabsEventListener();
-  setDomainArrangementEventListener();
-
+const setTooltipOnDeleteDuplicateTabsEventListener = () => {
   document
     .getElementById('normal_action')
     .addEventListener('mouseover', async () => {
-      const isOverWindows =
-        (await getSyncStorage('tabKillerIsOverWindows')) || false;
-      const tabs = isOverWindows
-        ? await getAllTabs()
-        : await getTabsOnActiveWindow();
-
+      const tabs = await getTabs();
       const urlCounter = {};
       const urlTitleDictionary = {};
+
       tabs.map((currentTab) => {
         const title = currentTab.title;
         const url = new URL(currentTab.url);
         urlCounter[url.href] = (urlCounter[url.href] || 0) + 1;
         urlTitleDictionary[url.href] = title;
       });
+
       const urlKeys = Object.keys(urlCounter);
       urlKeys.sort();
 
@@ -146,6 +133,19 @@ const addEventListeners = () => {
       });
       normalButton.title = titleString;
     });
+};
+
+const addEventListeners = () => {
+  setLanguageEventListeners();
+  setWhiteListEventListeners();
+  setHistoryEventListeners();
+  setScreenSwitchEventListeners();
+
+  setCheckboxEventListener();
+  setDeleteDuplicateTabsEventListener();
+  setKeywordDeleteTabsEventListener();
+  setDomainArrangementEventListener();
+  setTooltipOnDeleteDuplicateTabsEventListener();
 };
 
 chrome.storage.onChanged.addListener((changes) => {
