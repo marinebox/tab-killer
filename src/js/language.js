@@ -109,8 +109,7 @@ const switchDropdownActiveItems = async (element) => {
     if (element.id === item.id) {
       item.classList.add('is-active');
       const language = item.id.replace('lang_', '');
-      await setLocalStorage('tabKillerLanguage', language);
-      initLanguage();
+      setLocalStorage('tabKillerLanguage', language);
     } else {
       item.classList.remove('is-active');
     }

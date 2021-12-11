@@ -28,8 +28,7 @@ const addEventListeners = () => {
   // checkbox event, and recreate domains button
   const checkElement = document.getElementById('target_all_windows');
   checkElement.addEventListener('change', async () => {
-    await setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
-    initDomainButton();
+    setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
   });
 
   // delete duplicate tabs event
@@ -147,6 +146,25 @@ const addEventListeners = () => {
       normalButton.title = titleString;
     });
 };
+
+chrome.storage.onChanged.addListener((changes) => {
+  const changedStorageKeys = Object.keys(changes);
+  for (const key of changedStorageKeys) {
+    console.log(key);
+    switch (key) {
+      case 'tabKillerIsOverWindows':
+        initDomainButton();
+        break;
+      case 'tabKillerWhiteList':
+        break;
+      case 'tabKillerHistory':
+        break;
+      case 'tabKillerLanguage':
+        initLanguage();
+        break;
+    }
+  }
+});
 
 const initialize = () => {
   initLanguage();
