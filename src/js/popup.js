@@ -9,10 +9,8 @@ import {
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
-  getAllTabs,
   getSyncStorage,
   getTabs,
-  getTabsOnActiveWindow,
   setSyncStorage,
   stringJudger,
 } from './utils.js';
@@ -135,6 +133,29 @@ const setTooltipOnDeleteDuplicateTabsEventListener = () => {
     });
 };
 
+const setChromeStorageOnChangedEventListener = () => {
+  chrome.storage.onChanged.addListener((changes) => {
+    const changedStorageKeys = Object.keys(changes);
+    for (const key of changedStorageKeys) {
+      console.log(key);
+      switch (key) {
+        case 'tabKillerIsOverWindows':
+          initDomainButton();
+          break;
+        case 'tabKillerWhiteList':
+          initWhiteList();
+          break;
+        case 'tabKillerHistory':
+          initHistory();
+          break;
+        case 'tabKillerLanguage':
+          initLanguage();
+          break;
+      }
+    }
+  });
+};
+
 const addEventListeners = () => {
   setLanguageEventListeners();
   setWhiteListEventListeners();
@@ -146,28 +167,9 @@ const addEventListeners = () => {
   setKeywordDeleteTabsEventListener();
   setDomainArrangementEventListener();
   setTooltipOnDeleteDuplicateTabsEventListener();
-};
 
-chrome.storage.onChanged.addListener((changes) => {
-  const changedStorageKeys = Object.keys(changes);
-  for (const key of changedStorageKeys) {
-    console.log(key);
-    switch (key) {
-      case 'tabKillerIsOverWindows':
-        initDomainButton();
-        break;
-      case 'tabKillerWhiteList':
-        initWhiteList();
-        break;
-      case 'tabKillerHistory':
-        initHistory();
-        break;
-      case 'tabKillerLanguage':
-        initLanguage();
-        break;
-    }
-  }
-});
+  setChromeStorageOnChangedEventListener();
+};
 
 const initialize = () => {
   initLanguage();
