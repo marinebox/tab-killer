@@ -1,7 +1,11 @@
 'use strict';
 
 import { initDomainButton } from './domain.js';
-import { addHistory, initHistory, setHistoryEventListeners } from './history.js';
+import {
+  addHistory,
+  initHistory,
+  setHistoryEventListeners,
+} from './history.js';
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
@@ -19,17 +23,20 @@ const initKillOverWindow = async () => {
   document.getElementById('target_all_windows').checked = isKillOverWindow;
 };
 
+const setCheckboxEventListener = () => {
+  const checkElement = document.getElementById('target_all_windows');
+  checkElement.addEventListener('change', async () => {
+    setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
+  });
+};
+
 const addEventListeners = () => {
   setLanguageEventListeners();
   setWhiteListEventListeners();
   setHistoryEventListeners();
   setScreenSwitchEventListeners();
 
-  // checkbox event, and recreate domains button
-  const checkElement = document.getElementById('target_all_windows');
-  checkElement.addEventListener('change', async () => {
-    setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
-  });
+  setCheckboxEventListener();
 
   // delete duplicate tabs event
   document
@@ -174,6 +181,6 @@ const initialize = () => {
   initWhiteList();
   initDomainButton();
   addEventListeners();
-}
+};
 
 initialize();
