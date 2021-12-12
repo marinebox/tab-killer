@@ -55,18 +55,18 @@ const setKeywordDeleteTabsEventListener = () => {
       const tabs = await getTabs();
       const designatedURL = document.getElementById('designate').value;
       const newHistoryFactors = {};
-      const stringJudgeResult = stringJudger(designatedURL);
+      const stringJudgeResult = await stringJudger(designatedURL);
 
-      if (!stringJudgeResult) return;
+      if (stringJudgeResult) {
+        tabs.map((currentTab) => {
+          if (currentTab.url.match(designatedURL)) {
+            chrome.tabs.remove(currentTab.id);
+            newHistoryFactors[currentTab.url] = currentTab.title;
+          }
+        });
 
-      tabs.map((currentTab) => {
-        if (currentTab.url.match(designatedURL)) {
-          chrome.tabs.remove(currentTab.id);
-          newHistoryFactors[currentTab.url] = currentTab.title;
-        }
-      });
-
-      addHistory(newHistoryFactors);
+        addHistory(newHistoryFactors);
+      }
     });
 };
 
