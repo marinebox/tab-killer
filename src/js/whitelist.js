@@ -40,6 +40,8 @@ export const setWhiteListEventListeners = () => {
 
 export const initWhiteList = async () => {
   const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListBoardElement = document.getElementById('white_list');
+  whiteListBoardElement.innerHTML = '';
   for (const whiteURL of whiteListOnStorage) {
     createWhiteListBadge(whiteURL);
   }
