@@ -1,6 +1,6 @@
 'use strict';
 
-import { translateConfirmWord } from './language.js';
+import { getConfirmMsg } from './language.js';
 import { getLocalStorage, setLocalStorage } from './utils.js';
 
 export const setHistoryEventListeners = () => {
@@ -86,12 +86,7 @@ const deleteHistory = async (index) => {
 };
 
 const allClear = async () => {
-  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
-  const language =
-    languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
-  const confirmMessage = translateConfirmWord.get('historyAllClearConfirm')[
-    language
-  ];
+  const confirmMessage = await getConfirmMsg('historyAllClearConfirm');
   const isDelete = confirm(confirmMessage);
   if (isDelete) {
     setLocalStorage('tabKillerHistory', []);

@@ -143,3 +143,19 @@ export const setLanguageEventListeners = () => {
     });
   }
 };
+
+export const getConfirmMsg = async (key) => {
+  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  let language = 'en';
+  if (languageConfig === 'auto') {
+    const UILanguage = chrome.i18n.getUILanguage();
+    if (UILanguage === 'en' || UILanguage === 'ja') {
+      language = UILanguage;
+    }
+  } else {
+    language = languageConfig;
+  }
+
+  const msg = translateConfirmWord.get(key)[language];
+  return msg;
+};
