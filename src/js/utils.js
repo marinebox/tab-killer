@@ -78,7 +78,7 @@ export const getCurrentTab = () =>
 
 /**
  * @param {string} keyword
- * @returns {Boolean} if keyword is correct, return true, else false
+ * @return {Boolean} if keyword is correct, return true, else false
  */
 export const stringJudger = async (keyword) => {
   const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
