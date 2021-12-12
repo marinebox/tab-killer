@@ -80,7 +80,7 @@ export const getCurrentTab = () =>
  * @param {string} keyword
  * @return {Boolean} if keyword is correct, return true, else false
  */
-export const stringJudger = async (keyword) => {
+export const keywordChecker = async (keyword) => {
   const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
   const language =
     languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
