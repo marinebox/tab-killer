@@ -137,7 +137,6 @@ const setChromeStorageOnChangedEventListener = () => {
   chrome.storage.onChanged.addListener((changes) => {
     const changedStorageKeys = Object.keys(changes);
     for (const key of changedStorageKeys) {
-      console.log(key);
       switch (key) {
         case 'tabKillerIsOverWindows':
           initDomainButton();
