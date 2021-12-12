@@ -77,16 +77,16 @@ export const translateConfirmWord = new Map([
 ]);
 
 export const initLanguage = async () => {
-  const languageConfigOnStorage =
-    (await getLocalStorage('tabKillerLanguage')) || 'auto';
-  document
-    .getElementById(`lang_${languageConfigOnStorage}`)
-    .classList.add('is-active');
-
-  const language =
-    languageConfigOnStorage === 'auto'
-      ? chrome.i18n.getUILanguage()
-      : languageConfigOnStorage;
+  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  let language = 'en';
+  if (languageConfig === 'auto') {
+    const UILanguage = chrome.i18n.getUILanguage();
+    if (UILanguage === 'en' || UILanguage === 'ja') {
+      language = UILanguage;
+    }
+  } else {
+    language = languageConfig;
+  }
 
   // translate
   translateIdWord.forEach((value, key) => {
