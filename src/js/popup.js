@@ -12,7 +12,7 @@ import {
   getSyncStorage,
   getTabs,
   setSyncStorage,
-  stringJudger,
+  keywordChecker,
 } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -55,9 +55,9 @@ const setKeywordDeleteTabsEventListener = () => {
       const tabs = await getTabs();
       const designatedURL = document.getElementById('designate').value;
       const newHistoryFactors = {};
-      const stringJudgeResult = await stringJudger(designatedURL);
+      const keywordCheckeresult = await keywordChecker(designatedURL);
 
-      if (stringJudgeResult) {
+      if (keywordCheckeresult) {
         tabs.map((currentTab) => {
           if (currentTab.url.match(designatedURL)) {
             chrome.tabs.remove(currentTab.id);
