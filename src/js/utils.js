@@ -80,12 +80,27 @@ export const getCurrentTab = () =>
  * @param {string} keyword
  * @returns {Boolean} if keyword is correct, return true, else false
  */
-export const stringJudger = (keyword) => {
+export const stringJudger = async (keyword) => {
+  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  const language =
+    languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
+
+  let errorMsg = '';
   if (keyword === '') {
-    alert('空白を条件に指定することはできません。');
+    if (language === 'ja') {
+      errorMsg = '空白を条件に指定することはできません。';
+    } else {
+      errorMsg = 'empty cannot be used.';
+    }
+    alert(errorMsg);
     return false;
   } else if (keyword === '.' || keyword === '/' || keyword === ':') {
-    alert('無効な文字列です。');
+    if (language === 'ja') {
+      errorMsg = '無効な文字列です。';
+    } else {
+      errorMsg = 'This is an invalid keyword.';
+    }
+    alert(errorMsg);
     return false;
   } else {
     return true;

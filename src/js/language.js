@@ -76,6 +76,23 @@ export const translateConfirmWord = new Map([
   ],
 ]);
 
+export const translateErrorWord = new Map([
+  [
+    'keywordCheckerEmptyError',
+    {
+      en: 'empty cannot be used.',
+      ja: '空白を条件に指定することはできません。',
+    },
+  ],
+  [
+    'keywordCheckerInvalidStringError',
+    {
+      en: 'This is an invalid keyword.',
+      ja: '無効な文字列です。',
+    },
+  ],
+]);
+
 export const initLanguage = async () => {
   const languageConfigOnStorage =
     (await getLocalStorage('tabKillerLanguage')) || 'auto';
