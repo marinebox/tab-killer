@@ -95,7 +95,7 @@ const addPresentDomainWhiteList = async () => {
     alert('already exists');
     return;
   }
-  
+
   addWhiteListStorage(presentURL.hostname);
 };
 
@@ -145,7 +145,5 @@ const allClear = async () => {
 
   if (isDelete) {
     setSyncStorage('tabKillerWhiteList', []);
-    const whiteListBoardElement = document.getElementById('white_list');
-    whiteListBoardElement.innerHTML = '';
   }
 };
