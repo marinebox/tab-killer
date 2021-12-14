@@ -105,6 +105,7 @@ export const keywordChecker = async (keyword) => {
   } else {
     return true;
   }
+};
 
 /**
  * @return {string} if 'ja' used, return 'ja', else 'en'.
