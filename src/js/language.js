@@ -1,6 +1,10 @@
 'use strict';
 
-import { getLocalStorage, setLocalStorage } from './utils.js';
+import {
+  getAppropriateLanguageConfig,
+  getLocalStorage,
+  setLocalStorage,
+} from './utils.js';
 
 const translateIdWord = new Map([
   [
@@ -83,10 +87,7 @@ export const initLanguage = async () => {
     .getElementById(`lang_${languageConfigOnStorage}`)
     .classList.add('is-active');
 
-  const language =
-    languageConfigOnStorage === 'auto'
-      ? chrome.i18n.getUILanguage()
-      : languageConfigOnStorage;
+  const language = await getAppropriateLanguageConfig();
 
   // translate
   translateIdWord.forEach((value, key) => {
@@ -107,7 +108,6 @@ const switchDropdownActiveItems = async (element) => {
 
   for (const item of items) {
     if (element.id === item.id) {
-      item.classList.add('is-active');
       const language = item.id.replace('lang_', '');
       await setLocalStorage('tabKillerLanguage', language);
       initLanguage();
@@ -142,4 +142,10 @@ export const setLanguageEventListeners = () => {
       switchDropdownActiveItems(languageDropdownItem);
     });
   }
+};
+
+export const getConfirmMsg = async (key) => {
+  const language = await getAppropriateLanguageConfig();
+  const msg = translateConfirmWord.get(key)[language];
+  return msg;
 };

@@ -1,12 +1,7 @@
 'use strict';
 
-import { translateConfirmWord } from './language.js';
-import {
-  getCurrentTab,
-  getLocalStorage,
-  getSyncStorage,
-  setSyncStorage,
-} from './utils.js';
+import { getConfirmMsg } from './language.js';
+import { getCurrentTab, getSyncStorage, setSyncStorage } from './utils.js';
 
 export const setWhiteListEventListeners = () => {
   // add white list event
@@ -137,12 +132,7 @@ const deleteWhiteList = async (buttonElement) => {
 };
 
 const allClear = async () => {
-  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
-  const language =
-    languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
-  const confirmMessage = translateConfirmWord.get('whiteListAllClearConfirm')[
-    language
-  ];
+  const confirmMessage = await getConfirmMsg('whiteListAllClearConfirm');
   const isDelete = confirm(confirmMessage);
 
   if (isDelete) {
