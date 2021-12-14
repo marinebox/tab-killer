@@ -81,6 +81,12 @@ export const translateConfirmWord = new Map([
 ]);
 
 export const initLanguage = async () => {
+  const languageConfigOnStorage =
+    (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  document
+    .getElementById(`lang_${languageConfigOnStorage}`)
+    .classList.add('is-active');
+
   const language = await getAppropriateLanguageConfig();
 
   // translate
@@ -102,7 +108,6 @@ const switchDropdownActiveItems = async (element) => {
 
   for (const item of items) {
     if (element.id === item.id) {
-      item.classList.add('is-active');
       const language = item.id.replace('lang_', '');
       await setLocalStorage('tabKillerLanguage', language);
       initLanguage();
