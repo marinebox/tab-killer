@@ -105,4 +105,20 @@ export const keywordChecker = async (keyword) => {
   } else {
     return true;
   }
+
+/**
+ * @return {string} if 'ja' used, return 'ja', else 'en'.
+ */
+export const getAppropriateLanguageConfig = async () => {
+  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  let language = 'en';
+  if (languageConfig === 'auto') {
+    const UILanguage = chrome.i18n.getUILanguage();
+    if (UILanguage === 'en' || UILanguage === 'ja') {
+      language = UILanguage;
+    }
+  } else {
+    language = languageConfig;
+  }
+  return language;
 };
