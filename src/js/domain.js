@@ -1,11 +1,14 @@
 'use strict';
 
 import { addHistory } from './history.js';
-import { getAllTabs, getTabsOnActiveWindow, getSyncStorage } from './utils.js';
+import { getAllTabs, getSyncStorage, getTabsOnActiveWindow } from './utils.js';
 
 export const initDomainButton = async () => {
-  const isOverWindows = (await getSyncStorage('tabKillerIsOverWindows')) || false;
-  const allTabs = isOverWindows ? await getAllTabs() : await getTabsOnActiveWindow();
+  const isOverWindows =
+    (await getSyncStorage('tabKillerIsOverWindows')) || false;
+  const allTabs = isOverWindows
+    ? await getAllTabs()
+    : await getTabsOnActiveWindow();
 
   // extract the domains
   const tabUrlCounter = {};
@@ -29,8 +32,9 @@ export const initDomainButton = async () => {
 
     // faviconを<li>に追加
     const faviconElementImg = document.createElement('img');
-    faviconElementImg.src =
-      'http://www.google.com/s2/favicons?domain=' + domain;
+    faviconElementImg.src = 'http://favicon.yandex.net/favicon/' + domain;
+    faviconElementImg.style.width = '16px';
+    faviconElementImg.style.marginRight = '4px';
 
     const button = document.createElement('button');
     button.className = 'button is-link is-outlined';

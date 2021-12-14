@@ -37,8 +37,9 @@ export const initHistory = async () => {
 
     // faviconを<li>に追加
     const faviconElementImg = document.createElement('img');
-    faviconElementImg.src =
-      'http://favicon.hatena.ne.jp/?url=' + historyFactor.url;
+    const domain = new URL(historyFactor.url).hostname;
+    faviconElementImg.src = 'http://favicon.yandex.net/favicon/' + domain;
+    faviconElementImg.style.width = '16px';
     newHistoryElementLi.appendChild(faviconElementImg);
 
     // <a>を<li>に追加
