@@ -55,6 +55,18 @@ export const getTabsOnActiveWindow = () =>
   });
 
 /**
+ * @returns {Promise<Array>} tabs object
+ */
+export const getTabs = async () => {
+  const isOverWindows =
+    (await getSyncStorage('tabKillerIsOverWindows')) || false;
+  const tabs = isOverWindows
+    ? await getAllTabs()
+    : await getTabsOnActiveWindow();
+  return tabs;
+};
+
+/**
  * @return {Promise<Object>} current tab
  */
 export const getCurrentTab = () =>
@@ -63,6 +75,36 @@ export const getCurrentTab = () =>
       resolve(tabs[0])
     );
   });
+
+/**
+ * @param {string} keyword
+ * @return {Boolean} if keyword is correct, return true, else false
+ */
+export const keywordChecker = async (keyword) => {
+  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  const language =
+    languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
+
+  let errorMsg = '';
+  if (keyword === '') {
+    if (language === 'ja') {
+      errorMsg = '空白を条件に指定することはできません。';
+    } else {
+      errorMsg = 'empty cannot be used.';
+    }
+    alert(errorMsg);
+    return false;
+  } else if (keyword === '.' || keyword === '/' || keyword === ':') {
+    if (language === 'ja') {
+      errorMsg = '無効な文字列です。';
+    } else {
+      errorMsg = 'This is an invalid keyword.';
+    }
+    alert(errorMsg);
+    return false;
+  } else {
+    return true;
+  }
 
 /**
  * @return {string} if 'ja' used, return 'ja', else 'en'.

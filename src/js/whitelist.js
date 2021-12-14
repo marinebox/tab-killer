@@ -35,6 +35,8 @@ export const setWhiteListEventListeners = () => {
 
 export const initWhiteList = async () => {
   const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListBoardElement = document.getElementById('white_list');
+  whiteListBoardElement.innerHTML = '';
   for (const whiteURL of whiteListOnStorage) {
     createWhiteListBadge(whiteURL);
   }
@@ -59,7 +61,6 @@ const addWhiteList = async () => {
     return;
   }
 
-  createWhiteListBadge(addingUrl);
   addWhiteListStorage(addingUrl);
 
   // clear input
@@ -78,7 +79,6 @@ const addPresentUrlWhiteList = async () => {
     return;
   }
 
-  createWhiteListBadge(presentURL.href);
   addWhiteListStorage(presentURL.href);
 };
 
@@ -92,7 +92,7 @@ const addPresentDomainWhiteList = async () => {
     alert('already exists');
     return;
   }
-  createWhiteListBadge(presentURL.hostname);
+
   addWhiteListStorage(presentURL.hostname);
 };
 
@@ -137,7 +137,5 @@ const allClear = async () => {
 
   if (isDelete) {
     setSyncStorage('tabKillerWhiteList', []);
-    const whiteListBoardElement = document.getElementById('white_list');
-    whiteListBoardElement.innerHTML = '';
   }
 };

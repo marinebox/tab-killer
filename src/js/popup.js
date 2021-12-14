@@ -1,14 +1,18 @@
 'use strict';
 
 import { initDomainButton } from './domain.js';
-import { addHistory, setHistoryEventListeners } from './history.js';
+import {
+  addHistory,
+  initHistory,
+  setHistoryEventListeners,
+} from './history.js';
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
-  getAllTabs,
   getSyncStorage,
-  getTabsOnActiveWindow,
+  getTabs,
   setSyncStorage,
+  keywordChecker,
 } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -19,30 +23,20 @@ const initKillOverWindow = async () => {
   document.getElementById('target_all_windows').checked = isKillOverWindow;
 };
 
-const addEventListeners = () => {
-  setLanguageEventListeners();
-  setWhiteListEventListeners();
-  setHistoryEventListeners();
-  setScreenSwitchEventListeners();
-
-  // checkbox event, and recreate domains button
+const setCheckboxEventListener = () => {
   const checkElement = document.getElementById('target_all_windows');
   checkElement.addEventListener('change', async () => {
-    await setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
-    initDomainButton();
+    setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
   });
+};
 
-  // delete duplicate tabs event
+const setDeleteDuplicateTabsEventListener = () => {
   document
     .getElementById('normal_action')
     .addEventListener('click', async () => {
-      const isOverWindows =
-        (await getSyncStorage('tabKillerIsOverWindows')) || false;
-      const tabs = isOverWindows
-        ? await getAllTabs()
-        : await getTabsOnActiveWindow();
-
+      const tabs = await getTabs();
       const whiteList = (await getSyncStorage('whiteList')) || [];
+
       tabs.map((currentTab, index) => {
         tabs
           .slice(index)
@@ -52,42 +46,34 @@ const addEventListeners = () => {
           .map((targetTab) => chrome.tabs.remove(targetTab.id));
       });
     });
+};
 
-  // keyword delete tabs event
+const setKeywordDeleteTabsEventListener = () => {
   document
     .getElementById('designate_delete')
     .addEventListener('click', async () => {
-      if (designatedURL === '') {
-        alert('空白を条件に指定することはできません。');
-        return;
-      }
-
-      const isOverWindows =
-        (await getSyncStorage('tabKillerIsOverWindows')) || false;
-      const tabs = isOverWindows
-        ? await getAllTabs()
-        : await getTabsOnActiveWindow();
+      const tabs = await getTabs();
       const designatedURL = document.getElementById('designate').value;
       const newHistoryFactors = {};
+      const keywordCheckeresult = await keywordChecker(designatedURL);
 
-      tabs.map((currentTab) => {
-        if (currentTab.url.match(designatedURL)) {
-          chrome.tabs.remove(currentTab.id);
-          newHistoryFactors[currentTab.url] = currentTab.title;
-        }
-      });
+      if (keywordCheckeresult) {
+        tabs.map((currentTab) => {
+          if (currentTab.url.match(designatedURL)) {
+            chrome.tabs.remove(currentTab.id);
+            newHistoryFactors[currentTab.url] = currentTab.title;
+          }
+        });
 
-      addHistory(newHistoryFactors);
+        addHistory(newHistoryFactors);
+      }
     });
+};
 
-  // domain arrangement
+const setDomainArrangementEventListener = () => {
   document.getElementById('range_tabs').addEventListener('click', async () => {
     const tabsIdUrl = [];
-    const isOverWindows =
-      (await getSyncStorage('tabKillerIsOverWindows')) || false;
-    const tabs = isOverWindows
-      ? await getAllTabs()
-      : await getTabsOnActiveWindow();
+    const tabs = await getTabs();
     tabs.map((tab) => {
       const url = tab.url;
       const id = tab.id;
@@ -101,24 +87,23 @@ const addEventListeners = () => {
       { index: 0 }
     );
   });
+};
 
+const setTooltipOnDeleteDuplicateTabsEventListener = () => {
   document
     .getElementById('normal_action')
     .addEventListener('mouseover', async () => {
-      const isOverWindows =
-        (await getSyncStorage('tabKillerIsOverWindows')) || false;
-      const tabs = isOverWindows
-        ? await getAllTabs()
-        : await getTabsOnActiveWindow();
-
+      const tabs = await getTabs();
       const urlCounter = {};
       const urlTitleDictionary = {};
+
       tabs.map((currentTab) => {
         const title = currentTab.title;
         const url = new URL(currentTab.url);
         urlCounter[url.href] = (urlCounter[url.href] || 0) + 1;
         urlTitleDictionary[url.href] = title;
       });
+
       const urlKeys = Object.keys(urlCounter);
       urlKeys.sort();
 
@@ -148,8 +133,49 @@ const addEventListeners = () => {
     });
 };
 
-initLanguage();
-initKillOverWindow();
-initWhiteList();
-initDomainButton();
-addEventListeners();
+const setChromeStorageOnChangedEventListener = () => {
+  chrome.storage.onChanged.addListener((changes) => {
+    const changedStorageKeys = Object.keys(changes);
+    for (const key of changedStorageKeys) {
+      switch (key) {
+        case 'tabKillerIsOverWindows':
+          initDomainButton();
+          break;
+        case 'tabKillerWhiteList':
+          initWhiteList();
+          break;
+        case 'tabKillerHistory':
+          initHistory();
+          break;
+        case 'tabKillerLanguage':
+          initLanguage();
+          break;
+      }
+    }
+  });
+};
+
+const addEventListeners = () => {
+  setLanguageEventListeners();
+  setWhiteListEventListeners();
+  setHistoryEventListeners();
+  setScreenSwitchEventListeners();
+
+  setCheckboxEventListener();
+  setDeleteDuplicateTabsEventListener();
+  setKeywordDeleteTabsEventListener();
+  setDomainArrangementEventListener();
+  setTooltipOnDeleteDuplicateTabsEventListener();
+
+  setChromeStorageOnChangedEventListener();
+};
+
+const initialize = () => {
+  initLanguage();
+  initKillOverWindow();
+  initWhiteList();
+  initDomainButton();
+  addEventListeners();
+};
+
+initialize();
