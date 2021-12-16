@@ -35,7 +35,7 @@ const setDeleteDuplicateTabsEventListener = () => {
     .getElementById('normal_action')
     .addEventListener('click', async () => {
       const tabs = await getTabs();
-      const whiteList = (await getSyncStorage('whiteList')) || [];
+      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
 
       tabs.map((currentTab, index) => {
         tabs
