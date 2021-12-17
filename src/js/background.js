@@ -20,7 +20,7 @@ const tabCount = async () => {
   );
 
   chrome.action.setBadgeText({
-    text: duplicatedTabNum > 0 ? duplicatedTabNum.toString() : '',
+    text: duplicatedTabNum > 0 ? duplicatedTabNum.toString() : ''
   });
 };
 

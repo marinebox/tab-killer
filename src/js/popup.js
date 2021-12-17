@@ -4,7 +4,7 @@ import { initDomainButton } from './domain.js';
 import {
   addHistory,
   initHistory,
-  setHistoryEventListeners,
+  setHistoryEventListeners
 } from './history.js';
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
@@ -12,7 +12,7 @@ import {
   getSyncStorage,
   getTabs,
   setSyncStorage,
-  keywordChecker,
+  keywordChecker
 } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -113,7 +113,7 @@ const setTooltipOnDeleteDuplicateTabsEventListener = () => {
           duplicates.push({
             url: url,
             title: urlTitleDictionary[url],
-            count: urlCounter[url],
+            count: urlCounter[url]
           });
         }
       });

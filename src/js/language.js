@@ -9,7 +9,7 @@ import {
 const translateIdWord = new Map([
   [
     'target_all_windows_label',
-    { en: 'Target all windows', ja: '全ウィンドウを対象' },
+    { en: 'Target all windows', ja: '全ウィンドウを対象' }
   ],
   ['normal_action', { en: 'Delete duplicate tabs', ja: '重複タブを削除' }],
   ['range_tabs', { en: 'Rearrange tabs', ja: 'タブを並び替える' }],
@@ -17,50 +17,50 @@ const translateIdWord = new Map([
     'word_delete_message',
     {
       en: 'Tabs that contain the following string in the URL',
-      ja: 'URLに以下の文字列を含むタブを',
-    },
+      ja: 'URLに以下の文字列を含むタブを'
+    }
   ],
   ['designate_delete', { en: 'Delete', ja: '削除' }],
   [
     'domain_delete_message',
     {
       en: 'Delete by specifying the domain (number of pages)',
-      ja: 'ドメイン（ページ数）を指定して削除',
-    },
+      ja: 'ドメイン（ページ数）を指定して削除'
+    }
   ],
   [
     'white_list_message',
     {
       en: 'You can set up a whitelist',
-      ja: '消したくないタブのURLを設定できます。',
-    },
+      ja: '消したくないタブのURLを設定できます。'
+    }
   ],
   [
     'add_white_list',
     {
       en: 'Add',
-      ja: '追加',
-    },
+      ja: '追加'
+    }
   ],
   [
     'add_present_URL_whitelist',
     {
       en: 'Add present URL',
-      ja: '現在のページを追加',
-    },
+      ja: '現在のページを追加'
+    }
   ],
   [
     'add_present_domain_whitelist',
     {
       en: 'Add present domain',
-      ja: '現在のページのドメインを追加',
-    },
-  ],
+      ja: '現在のページのドメインを追加'
+    }
+  ]
 ]);
 
 const placeholderIdsWord = new Map([
   ['white_list_input', { en: 'Enter URL', ja: 'URLを入力' }],
-  ['designate', { en: 'URL keyword', ja: '消したいURL内のキーワード' }],
+  ['designate', { en: 'URL keyword', ja: '消したいURL内のキーワード' }]
 ]);
 
 export const translateConfirmWord = new Map([
@@ -68,16 +68,16 @@ export const translateConfirmWord = new Map([
     'historyAllClearConfirm',
     {
       en: 'Are you sure you want to delete all history?',
-      ja: '本当にすべて削除しますか？',
-    },
+      ja: '本当にすべて削除しますか？'
+    }
   ],
   [
     'whiteListAllClearConfirm',
     {
       en: 'Are you sure you want to delete all whitelist?',
-      ja: '本当にすべて削除しますか？',
-    },
-  ],
+      ja: '本当にすべて削除しますか？'
+    }
+  ]
 ]);
 
 export const translateErrorWord = new Map([
@@ -85,16 +85,16 @@ export const translateErrorWord = new Map([
     'keywordCheckerEmptyError',
     {
       en: 'empty cannot be used.',
-      ja: '空白を条件に指定することはできません。',
-    },
+      ja: '空白を条件に指定することはできません。'
+    }
   ],
   [
     'keywordCheckerInvalidStringError',
     {
       en: 'This is an invalid keyword.',
-      ja: '無効な文字列です。',
-    },
-  ],
+      ja: '無効な文字列です。'
+    }
+  ]
 ]);
 
 export const initLanguage = async () => {
