@@ -55,7 +55,7 @@ export const getTabsOnActiveWindow = () =>
   });
 
 /**
- * @returns {Promise<Array>} tabs object
+ * @return {Promise<Array>} tabs object
  */
 export const getTabs = async () => {
   const isOverWindows =
