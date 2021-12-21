@@ -69,9 +69,9 @@ const setKeywordDeleteTabsEventListener = () => {
       const tabs = await getTabs();
       const designatedURL = document.getElementById('designate').value;
       const newHistoryFactors = {};
-      const keywordCheckeresult = await keywordChecker(designatedURL);
+      const keywordCheckerResult = await keywordChecker(designatedURL);
 
-      if (keywordCheckeresult) {
+      if (keywordCheckerResult) {
         tabs.map((currentTab) => {
           if (currentTab.url.match(designatedURL)) {
             chrome.tabs.remove(currentTab.id);
