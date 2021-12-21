@@ -28,8 +28,9 @@ chrome.tabs.onCreated.addListener(tabCount);
 chrome.tabs.onUpdated.addListener(tabCount);
 chrome.tabs.onRemoved.addListener(tabCount);
 
-chrome.commands.onCommand.addListener(function (command) {
+chrome.commands.onCommand.addListener((command) => {
+  console.log(command);
   if (command === 'scroll') {
-    alert('scrolled');
+    console.log('Command scroll 動いた');
   }
 });
