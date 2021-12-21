@@ -18,5 +18,14 @@
     "16": "images/16icon.png",
     "48": "images/48icon.png",
     "128": "images/128icon.png"
+  },
+
+  "commands": {
+    "scroll": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+1"
+      },
+      "description": "Scroll Function"
+    }
   }
 }
