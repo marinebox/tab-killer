@@ -22,15 +22,9 @@
 
   "commands": {
     "closeDuplicateTabs": {
-      "suggested_key": {
-        "default": "Alt+W"
-      },
       "description": "__MSG_shortcutCloseDuplicateTabsOnCurrentWindowDescription__"
     },
     "closeDuplicateTabsOnAllWindows": {
-      "suggested_key": {
-        "default": "Alt+Shift+W"
-      },
       "description": "__MSG_shortcutCloseDuplicateTabsOnAllWindowsDescription__"
     }
   }
