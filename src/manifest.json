@@ -21,11 +21,17 @@
   },
 
   "commands": {
-    "scroll": {
+    "closeDuplicateTabs": {
       "suggested_key": {
-        "default": "Ctrl+Shift+1"
+        "default": "Alt+W"
       },
-      "description": "Scroll Function"
+      "description": "__MSG_shortcutCloseDuplicateTabsOnCurrentWindowDescription__"
+    },
+    "closeDuplicateTabsOnAllWindows": {
+      "suggested_key": {
+        "default": "Alt+Shift+W"
+      },
+      "description": "__MSG_shortcutCloseDuplicateTabsOnAllWindowsDescription__"
     }
   }
 }

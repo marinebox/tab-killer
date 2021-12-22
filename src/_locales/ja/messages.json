@@ -1,5 +1,11 @@
 {
   "appDescription": {
     "message": "重複タブを閉じるなど、タブを管理する拡張機能"
+  },
+  "shortcutCloseDuplicateTabsOnCurrentWindowDescription": {
+    "message": "重複タブを閉じる"
+  },
+  "shortcutCloseDuplicateTabsOnAllWindowsDescription": {
+    "message": "全ウィンドウの重複タブを閉じる"
   }
 }
