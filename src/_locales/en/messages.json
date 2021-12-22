@@ -1,5 +1,11 @@
 {
   "appDescription": {
     "message": "A chrome extension for closing duplicate tabs, and so on."
+  },
+  "shortcutCloseDuplicateTabsOnCurrentWindowDescription": {
+    "message": "Close duplicate tabs"
+  },
+  "shortcutCloseDuplicateTabsOnAllWindowsDescription": {
+    "message": "Close duplicate tabs on all windows"
   }
 }
