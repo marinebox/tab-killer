@@ -11,8 +11,8 @@ import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
   getSyncStorage,
   getTabs,
-  setSyncStorage,
-  keywordChecker
+  keywordChecker,
+  setSyncStorage
 } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
@@ -21,6 +21,20 @@ const initKillOverWindow = async () => {
     (await getSyncStorage('tabKillerIsOverWindows')) || false;
   setSyncStorage('tabKillerIsOverWindows', isKillOverWindow);
   document.getElementById('target_all_windows').checked = isKillOverWindow;
+
+  // icon切り替え
+  const allWindowsIcon = document.getElementById('all_windows_icon');
+  const oneWindowIcon = document.getElementById('one_window_icon');
+
+  const selectedIcon = isKillOverWindow ? allWindowsIcon : oneWindowIcon;
+  const unselectedIcon = isKillOverWindow ? oneWindowIcon : allWindowsIcon;
+
+  selectedIcon.style = 'color: hsl(171, 100%, 29%)';
+  unselectedIcon.style = 'color: hsl(0, 0%, 60%)';
+  selectedIcon.classList.add('ph-2x');
+  selectedIcon.classList.remove('ph-lg');
+  unselectedIcon.classList.add('ph-lg');
+  unselectedIcon.classList.remove('ph-2x');
 };
 
 const setCheckboxEventListener = () => {
@@ -55,9 +69,9 @@ const setKeywordDeleteTabsEventListener = () => {
       const tabs = await getTabs();
       const designatedURL = document.getElementById('designate').value;
       const newHistoryFactors = {};
-      const keywordCheckeresult = await keywordChecker(designatedURL);
+      const keywordCheckerResult = await keywordChecker(designatedURL);
 
-      if (keywordCheckeresult) {
+      if (keywordCheckerResult) {
         tabs.map((currentTab) => {
           if (currentTab.url.match(designatedURL)) {
             chrome.tabs.remove(currentTab.id);
@@ -140,6 +154,7 @@ const setChromeStorageOnChangedEventListener = () => {
       switch (key) {
         case 'tabKillerIsOverWindows':
           initDomainButton();
+          initKillOverWindow();
           break;
         case 'tabKillerWhiteList':
           initWhiteList();
