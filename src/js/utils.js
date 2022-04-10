@@ -77,6 +77,17 @@ export const getCurrentTab = () =>
   });
 
 /**
+ * ホワイトリスト以外のタブを取得する
+ * @return {Promise<Array>}
+ */
+export const getTabsWithoutWhiteList = async () => {
+  const tabs = await getTabs();
+  const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+
+  return tabs.filter((tab) => !whiteList.includes(tab.url));
+};
+
+/**
  * @param {string} keyword
  * @return {Boolean} if keyword is correct, return true, else false
  */
@@ -122,15 +133,4 @@ export const getAppropriateLanguageConfig = async () => {
     language = languageConfig;
   }
   return language;
-};
-
-/**
- * ホワイトリスト以外のタブを取得する
- * @return {Promise<Array>}
- */
-export const getTabsWithoutWhiteList = async () => {
-  const tabs = await getTabs();
-  const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
-
-  return tabs.filter((tab) => !whiteList.includes(tab.url));
 };
