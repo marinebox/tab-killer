@@ -1,7 +1,12 @@
 'use strict';
 
 import { addHistory } from './history.js';
-import { getAllTabs, getSyncStorage, getTabsOnActiveWindow } from './utils.js';
+import {
+  getAllTabs,
+  getSyncStorage,
+  getTabsOnActiveWindow,
+  getTabsWithoutWhiteList
+} from './utils.js';
 
 export const initDomainButton = async () => {
   const isOverWindows =
@@ -48,18 +53,22 @@ export const initDomainButton = async () => {
     document.getElementById(domain).addEventListener('click', async () => {
       const newHistoryFactors = {};
 
-      const allTabs = await getAllTabs();
+      const allTabs = await getTabsWithoutWhiteList();
       allTabs.map((currentTab) => {
         const currentTabUrl = new URL(currentTab.url);
+
         if (currentTabUrl.hostname === domain) {
           chrome.tabs.remove(currentTab.id);
           newHistoryFactors[currentTab.url] = currentTab.title;
         }
       });
       // remove button
-      document.getElementById(domain).remove();
-
-      addHistory(newHistoryFactors);
+      const whitelist = (await getSyncStorage('tabKillerWhiteList')) || [];
+      const whitelistDomains = whitelist.map((url) => new URL(url).hostname);
+      if (!whitelistDomains.includes(domain)) {
+        document.getElementById(domain).remove();
+        addHistory(newHistoryFactors);
+      }
     });
   }
 };

@@ -11,6 +11,7 @@ import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
   getSyncStorage,
   getTabs,
+  getTabsWithoutWhiteList,
   keywordChecker,
   setSyncStorage
 } from './utils.js';
@@ -34,15 +35,13 @@ const setDeleteDuplicateTabsEventListener = () => {
   document
     .getElementById('normal_action')
     .addEventListener('click', async () => {
-      const tabs = await getTabs();
-      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+      const tabs = await getTabsWithoutWhiteList();
 
       tabs.map((currentTab, index) => {
         tabs
           .slice(index)
           .filter((targetTab) => targetTab.id !== currentTab.id)
           .filter((targetTab) => targetTab.url === currentTab.url)
-          .filter((targetTab) => !whiteList.includes(targetTab.url))
           .map((targetTab) => chrome.tabs.remove(targetTab.id));
       });
     });
@@ -52,7 +51,7 @@ const setKeywordDeleteTabsEventListener = () => {
   document
     .getElementById('designate_delete')
     .addEventListener('click', async () => {
-      const tabs = await getTabs();
+      const tabs = await getTabsWithoutWhiteList();
       const designatedURL = document.getElementById('designate').value;
       const newHistoryFactors = {};
       const keywordCheckerResult = await keywordChecker(designatedURL);

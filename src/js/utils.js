@@ -83,8 +83,13 @@ export const getCurrentTab = () =>
 export const getTabsWithoutWhiteList = async () => {
   const tabs = await getTabs();
   const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const domains = whiteList.filter(
+    (url) => !url.includes('http://') && !url.includes('https://')
+  );
 
-  return tabs.filter((tab) => !whiteList.includes(tab.url));
+  return tabs
+    .filter((tab) => !whiteList.includes(tab.url))
+    .filter((tab) => tab.url.hostname.includes(domains));
 };
 
 /**
