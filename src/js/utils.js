@@ -123,3 +123,14 @@ export const getAppropriateLanguageConfig = async () => {
   }
   return language;
 };
+
+/**
+ * ホワイトリスト以外のタブを取得する
+ * @return {Promise<Array>}
+ */
+export const getTabsWithoutWhiteList = async () => {
+  const tabs = await getTabs();
+  const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+
+  return tabs.filter((tab) => !whiteList.includes(tab.url));
+};
