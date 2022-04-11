@@ -56,7 +56,6 @@ export const initDomainButton = async () => {
       const allTabs = await getTabsWithoutWhiteList();
       allTabs.map((currentTab) => {
         const currentTabUrl = new URL(currentTab.url);
-
         if (currentTabUrl.hostname === domain) {
           chrome.tabs.remove(currentTab.id);
           newHistoryFactors[currentTab.url] = currentTab.title;
@@ -64,7 +63,13 @@ export const initDomainButton = async () => {
       });
       // remove button
       const whitelist = (await getSyncStorage('tabKillerWhiteList')) || [];
-      const whitelistDomains = whitelist.map((url) => new URL(url).hostname);
+      const whitelistDomains = whitelist.map((url) => {
+        const domain =
+          url.includes('http://') || url.includes('https://')
+            ? new URL(url).hostname
+            : url;
+        return domain;
+      });
       if (!whitelistDomains.includes(domain)) {
         document.getElementById(domain).remove();
         addHistory(newHistoryFactors);
