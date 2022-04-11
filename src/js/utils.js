@@ -75,12 +75,9 @@ export const getTabsWithoutWhiteList = async () => {
   const domainReg = /^https?:\/\/.+/;
   const whiteListDomains = whiteList.filter((w) => domainReg.test(w));
 
-  return tabs.filter(
-    (t) =>
-      !whiteListDomains
-        .includes(new URL(t.url).hostname)
-        .filter((t) => !whiteList.includes(t.url))
-  );
+  return tabs
+    .filter((t) => !whiteListDomains.includes(new URL(t.url).hostname))
+    .filter((t) => !whiteList.includes(t.url));
 };
 
 /**
