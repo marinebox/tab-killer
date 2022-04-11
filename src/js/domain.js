@@ -1,7 +1,12 @@
 'use strict';
 
 import { addHistory } from './history.js';
-import { getAllTabs, getSyncStorage, getTabsOnActiveWindow } from './utils.js';
+import {
+  getAllTabs,
+  getSyncStorage,
+  getTabsOnActiveWindow,
+  getTabsWithoutWhiteList
+} from './utils.js';
 
 export const initDomainButton = async () => {
   const isOverWindows =
@@ -48,8 +53,8 @@ export const initDomainButton = async () => {
     document.getElementById(domain).addEventListener('click', async () => {
       const newHistoryFactors = {};
 
-      const allTabs = await getAllTabs();
-      allTabs.map((currentTab) => {
+      const tabs = await getTabsWithoutWhiteList();
+      tabs.map((currentTab) => {
         const currentTabUrl = new URL(currentTab.url);
         if (currentTabUrl.hostname === domain) {
           chrome.tabs.remove(currentTab.id);
