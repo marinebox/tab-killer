@@ -62,9 +62,11 @@ export const initDomainButton = async () => {
         }
       });
       // remove button
-      document.getElementById(domain).remove();
-
-      addHistory(newHistoryFactors);
+      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+      if (!whiteList.includes(domain)) {
+        document.getElementById(domain).remove();
+        addHistory(newHistoryFactors);
+      }
     });
   }
 };
