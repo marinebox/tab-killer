@@ -52,8 +52,20 @@ export const initDomainButton = async () => {
 
     document.getElementById(domain).addEventListener('click', async () => {
       const newHistoryFactors = {};
+      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
 
-      const tabs = await getTabsWithoutWhiteList();
+      let isForceDelete = false;
+      if (whiteList.includes(domain)) {
+        isForceDelete = confirm(
+          'ホワイトリストに存在しますが、強制的に削除しますか？'
+        );
+        if (isForceDelete === false) return;
+      }
+
+      const tabs = isForceDelete
+        ? await getAllTabs()
+        : await getTabsWithoutWhiteList();
+
       tabs.map((currentTab) => {
         const currentTabUrl = new URL(currentTab.url);
         if (currentTabUrl.hostname === domain) {
@@ -61,12 +73,9 @@ export const initDomainButton = async () => {
           newHistoryFactors[currentTab.url] = currentTab.title;
         }
       });
-      // remove button
-      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
-      if (!whiteList.includes(domain)) {
-        document.getElementById(domain).remove();
-        addHistory(newHistoryFactors);
-      }
+
+      document.getElementById(domain).remove();
+      addHistory(newHistoryFactors);
     });
   }
 };
