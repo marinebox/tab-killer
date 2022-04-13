@@ -1,6 +1,7 @@
 'use strict';
 
 import { addHistory } from './history.js';
+import { getConfirmMsg } from './language.js';
 import {
   getAllTabs,
   getSyncStorage,
@@ -55,10 +56,12 @@ export const initDomainButton = async () => {
       const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
 
       let isForceDelete = false;
+
       if (whiteList.includes(domain)) {
-        isForceDelete = confirm(
-          'ホワイトリストに存在しますが、強制的に削除しますか？'
+        const confirmMessage = await getConfirmMsg(
+          'whiteListDomainClearConfirm'
         );
+        isForceDelete = confirm(confirmMessage);
         if (isForceDelete === false) return;
       }
 
