@@ -69,7 +69,7 @@ export const getTabs = async () => {
 /**
  * @return {Promise<Array>} tabs object
  */
-export const getTabsWithoutWhiteList = async () => {
+export const getTabsNotInWhiteList = async () => {
   const tabs = await getTabs();
   const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
   const domainReg = /^https?:\/\/.+/;

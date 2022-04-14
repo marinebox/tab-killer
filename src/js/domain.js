@@ -6,7 +6,7 @@ import {
   getAllTabs,
   getSyncStorage,
   getTabsOnActiveWindow,
-  getTabsWithoutWhiteList
+  getTabsNotInWhiteList
 } from './utils.js';
 
 export const initDomainButton = async () => {
@@ -67,7 +67,7 @@ export const initDomainButton = async () => {
 
       const tabs = isForceDelete
         ? await getAllTabs()
-        : await getTabsWithoutWhiteList();
+        : await getTabsNotInWhiteList();
 
       tabs.map((currentTab) => {
         const currentTabUrl = new URL(currentTab.url);
