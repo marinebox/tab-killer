@@ -79,7 +79,7 @@ export const translateConfirmWord = new Map([
     }
   ],
   [
-    'whiteListDomainClearConfirm',
+    'DomainRemoveInWhiteListConfirm',
     {
       en: 'This domain exists on whitelist.\nAre you sure close them?',
       ja: 'このドメインはホワイトリストに存在します。\n本当にタブを閉じますか？'

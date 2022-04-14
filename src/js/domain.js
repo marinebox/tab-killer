@@ -59,7 +59,7 @@ export const initDomainButton = async () => {
 
       if (whiteList.includes(domain)) {
         const confirmMessage = await getConfirmMsg(
-          'whiteListDomainClearConfirm'
+          'DomainRemoveInWhiteListConfirm'
         );
         isForceDelete = confirm(confirmMessage);
         if (isForceDelete === false) return;
