@@ -67,6 +67,25 @@ export const getTabs = async () => {
 };
 
 /**
+ * @return {Promise<Array>} tabs object
+ */
+export const getTabsNotInWhiteList = async () => {
+  const tabs = await getTabs();
+  const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const domainReg = /^https?:\/\/.+/;
+  const whiteListDomains = whiteList.filter((w) => !domainReg.test(w));
+
+  return tabs
+    .filter((t) => {
+      return !whiteListDomains.some((d) => {
+        const domainMatchReg = new RegExp('^(' + d + '|.+.' + d + ')$');
+        return domainMatchReg.test(new URL(t.url).hostname);
+      });
+    })
+    .filter((t) => !whiteList.includes(t.url));
+};
+
+/**
  * @return {Promise<Object>} current tab
  */
 export const getCurrentTab = () =>

@@ -3,7 +3,7 @@
 import {
   getAppropriateLanguageConfig,
   getLocalStorage,
-  setLocalStorage,
+  setLocalStorage
 } from './utils.js';
 
 const translateIdWord = new Map([
@@ -76,6 +76,13 @@ export const translateConfirmWord = new Map([
     {
       en: 'Are you sure you want to delete all whitelist?',
       ja: '本当にすべて削除しますか？'
+    }
+  ],
+  [
+    'DomainRemoveInWhiteListConfirm',
+    {
+      en: 'This domain exists on whitelist.\nAre you sure close them?',
+      ja: 'このドメインはホワイトリストに存在します。\n本当にタブを閉じますか？'
     }
   ]
 ]);

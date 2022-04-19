@@ -1,7 +1,13 @@
 'use strict';
 
 import { addHistory } from './history.js';
-import { getAllTabs, getSyncStorage, getTabsOnActiveWindow } from './utils.js';
+import { getConfirmMsg } from './language.js';
+import {
+  getAllTabs,
+  getSyncStorage,
+  getTabsOnActiveWindow,
+  getTabsNotInWhiteList
+} from './utils.js';
 
 export const initDomainButton = async () => {
   const isOverWindows =
@@ -47,18 +53,31 @@ export const initDomainButton = async () => {
 
     document.getElementById(domain).addEventListener('click', async () => {
       const newHistoryFactors = {};
+      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
 
-      const allTabs = await getAllTabs();
-      allTabs.map((currentTab) => {
+      let isForceDelete = false;
+
+      if (whiteList.includes(domain)) {
+        const confirmMessage = await getConfirmMsg(
+          'DomainRemoveInWhiteListConfirm'
+        );
+        isForceDelete = confirm(confirmMessage);
+        if (isForceDelete === false) return;
+      }
+
+      const tabs = isForceDelete
+        ? await getAllTabs()
+        : await getTabsNotInWhiteList();
+
+      tabs.map((currentTab) => {
         const currentTabUrl = new URL(currentTab.url);
         if (currentTabUrl.hostname === domain) {
           chrome.tabs.remove(currentTab.id);
           newHistoryFactors[currentTab.url] = currentTab.title;
         }
       });
-      // remove button
-      document.getElementById(domain).remove();
 
+      document.getElementById(domain).remove();
       addHistory(newHistoryFactors);
     });
   }
