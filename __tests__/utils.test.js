@@ -1,7 +1,15 @@
-function sum(a, b) {
-  return a + b;
-}
+import { filterTabsWhichIsNotInWhiteList } from '../src/js/utils.js';
 
-test('adds 1 + 2 to equal 3', () => {
-  expect(sum(1, 2)).toBe(3);
+describe('test_filterTabsWhichIsNotInWhiteList', () => {
+  test('ホワイトリストに入ったドメインは除かれる', () => {
+    const whiteList = ['example.com'];
+    const tabs = [
+      {
+        url: 'https://example.com/hoge'
+      }
+    ];
+
+    const filteredTabs = filterTabsWhichIsNotInWhiteList(tabs, whiteList);
+    expect(filteredTabs).toStrictEqual([]);
+  });
 });
