@@ -77,7 +77,7 @@ export const filterTabsWhichIsNotInWhiteList = (tabs, whiteList) => {
         return domainMatchReg.test(new URL(t.url).hostname);
       });
     })
-    .filter((t) => !whiteList.includes(t.url));
+    .filter((t) => !whiteList.includes(new URL(t.url).href));
 };
 
 /**
