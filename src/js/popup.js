@@ -38,6 +38,10 @@ const setDeleteDuplicateTabsEventListener = () => {
       const tabs = await getTabsNotInWhiteList();
       const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
 
+      tabs.sort((a, b) => {
+        return b.active - a.active;
+      });
+
       tabs.map((currentTab, index) => {
         tabs
           .slice(index)
