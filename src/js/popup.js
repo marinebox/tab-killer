@@ -36,19 +36,20 @@ const setDeleteDuplicateTabsEventListener = () => {
     .getElementById('normal_action')
     .addEventListener('click', async () => {
       const tabs = await getTabsNotInWhiteList();
-      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
 
       tabs.sort((a, b) => {
         return b.active - a.active;
       });
 
-      tabs.map((currentTab, index) => {
-        tabs
-          .slice(index)
-          .filter((targetTab) => targetTab.id !== currentTab.id)
-          .filter((targetTab) => targetTab.url === currentTab.url)
-          .filter((targetTab) => !whiteList.includes(targetTab.url))
-          .map((targetTab) => chrome.tabs.remove(targetTab.id));
+      const urlSet = new Set(tabs.map((tab) => tab.url));
+      const urlAlreadyExistFlagMap = {};
+      urlSet.forEach((url) => (urlAlreadyExistFlagMap[url] = false));
+      tabs.map((tab) => {
+        if (urlAlreadyExistFlagMap[tab.url] === false) {
+          urlAlreadyExistFlagMap[tab.url] = true;
+        } else {
+          chrome.tabs.remove(tab.id);
+        }
       });
     });
 };
