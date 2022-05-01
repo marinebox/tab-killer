@@ -29,18 +29,10 @@ const tabCloser = async (tabs) => {
 };
 
 const tabCount = async () => {
-  const tabUrlCounter = {};
-
   const allTabs = await getAllTabs();
-  allTabs.forEach((tab) => {
-    const url = tab.url;
-    tabUrlCounter[url] = (tabUrlCounter[url] || 0) + 1;
-  });
-
-  const duplicatedTabNum = Object.values(tabUrlCounter).reduce(
-    (prev, current) => prev + current - 1,
-    0
-  );
+  const allTabsURL = allTabs.map((tab) => tab.url);
+  const tabsSet = new Set(allTabsURL);
+  const duplicatedTabNum = allTabsURL.length - tabsSet.size;
 
   chrome.action.setBadgeText({
     text: duplicatedTabNum > 0 ? duplicatedTabNum.toString() : ''
