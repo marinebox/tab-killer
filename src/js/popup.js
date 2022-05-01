@@ -42,11 +42,11 @@ const setDeleteDuplicateTabsEventListener = () => {
       });
 
       const urlSet = new Set(tabs.map((tab) => tab.url));
-      const urlDict = {};
-      urlSet.forEach((url) => (urlDict[url] = false));
+      const firstUrlFlagMap = {};
+      urlSet.forEach((url) => (firstUrlFlagMap[url] = false));
       tabs.map((currentTab) => {
-        if (urlDict[currentTab.url] === false) {
-          urlDict[currentTab.url] = true;
+        if (firstUrlFlagMap[currentTab.url] === false) {
+          firstUrlFlagMap[currentTab.url] = true;
         } else {
           chrome.tabs.remove(currentTab.id);
         }
