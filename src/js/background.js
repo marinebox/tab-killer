@@ -30,9 +30,9 @@ const tabCloser = async (tabs) => {
 
 const tabCount = async () => {
   const allTabs = await getAllTabs();
-  const allTabsURL = allTabs.map((tab) => tab.url);
-  const tabsSet = new Set(allTabsURL);
-  const duplicatedTabNum = allTabsURL.length - tabsSet.size;
+  const allTabsUrl = allTabs.map((tab) => tab.url);
+  const allTabsUrlSet = new Set(allTabsUrl);
+  const duplicatedTabNum = allTabsUrl.length - allTabsUrlSet.size;
 
   chrome.action.setBadgeText({
     text: duplicatedTabNum > 0 ? duplicatedTabNum.toString() : ''
