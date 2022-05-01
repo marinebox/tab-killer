@@ -42,13 +42,13 @@ const setDeleteDuplicateTabsEventListener = () => {
       });
 
       const urlSet = new Set(tabs.map((tab) => tab.url));
-      const firstUrlFlagMap = {};
-      urlSet.forEach((url) => (firstUrlFlagMap[url] = false));
-      tabs.map((currentTab) => {
-        if (firstUrlFlagMap[currentTab.url] === false) {
-          firstUrlFlagMap[currentTab.url] = true;
+      const urlAlreadyExistFlagMap = {};
+      urlSet.forEach((url) => (urlAlreadyExistFlagMap[url] = false));
+      tabs.map((tab) => {
+        if (urlAlreadyExistFlagMap[tab.url] === false) {
+          urlAlreadyExistFlagMap[tab.url] = true;
         } else {
-          chrome.tabs.remove(currentTab.id);
+          chrome.tabs.remove(tab.id);
         }
       });
     });
