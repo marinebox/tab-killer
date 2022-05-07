@@ -1,43 +1,5 @@
 'use strict';
 
-/**
- * @param  {string} key
- * @return {Promise} local storage object
- */
-export const getLocalStorage = (key = null) =>
-  new Promise((resolve) => {
-    chrome.storage.local.get(key, (data) => resolve(data[key]));
-  });
-
-/**
- * @param  {string} key
- * @param  {Object} value
- * @return {Promise} local storage object
- */
-export const setLocalStorage = (key, value) =>
-  new Promise((resolve) => {
-    chrome.storage.local.set({ [key]: value }, () => resolve());
-  });
-
-/**
- * @param  {string} key
- * @param  {Object} value
- * @return {Promise} sync storage object
- */
-export const setSyncStorage = (key, value) =>
-  new Promise((resolve) => {
-    chrome.storage.sync.set({ [key]: value }, () => resolve());
-  });
-
-/**
- * @param  {string} key
- * @return {Promise} sync storage object
- */
-export const getSyncStorage = (key = null) =>
-  new Promise((resolve) => {
-    chrome.storage.sync.get(key, (data) => resolve(data[key]));
-  });
-
 const keyMap = {
   tabKillerHistory: 'local',
   tabKillerIsOverWindows: 'sync',
