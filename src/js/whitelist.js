@@ -1,7 +1,7 @@
 'use strict';
 
 import { getConfirmMsg } from './language.js';
-import { getCurrentTab, getSyncStorage, setSyncStorage } from './utils.js';
+import { getCurrentTab, getStorage, setStorage } from './utils.js';
 
 export const setWhiteListEventListeners = () => {
   // add white list event
@@ -34,7 +34,7 @@ export const setWhiteListEventListeners = () => {
 };
 
 export const initWhiteList = async () => {
-  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListOnStorage = (await getStorage('tabKillerWhiteList')) || [];
   const whiteListBoardElement = document.getElementById('white_list');
   whiteListBoardElement.innerHTML = '';
   for (const whiteURL of whiteListOnStorage) {
@@ -53,7 +53,7 @@ const addWhiteList = async () => {
     return;
   }
 
-  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListOnStorage = (await getStorage('tabKillerWhiteList')) || [];
   const isDuplicate = whiteListOnStorage.includes(addingUrl);
 
   if (isDuplicate) {
@@ -71,7 +71,7 @@ const addPresentUrlWhiteList = async () => {
   const currentTab = await getCurrentTab();
   const presentURL = new URL(currentTab.url);
 
-  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListOnStorage = (await getStorage('tabKillerWhiteList')) || [];
   const isDuplicate = whiteListOnStorage.includes(presentURL.href);
 
   if (isDuplicate) {
@@ -86,7 +86,7 @@ const addPresentDomainWhiteList = async () => {
   const currentTab = await getCurrentTab();
   const presentURL = new URL(currentTab.url);
 
-  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListOnStorage = (await getStorage('tabKillerWhiteList')) || [];
   const isDuplicate = whiteListOnStorage.includes(presentURL.hostname);
   if (isDuplicate) {
     alert('already exists');
@@ -115,9 +115,9 @@ const createWhiteListBadge = (addingUrl) => {
 
 const addWhiteListStorage = async (addingUrl) => {
   // add new URL white list on storage
-  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListOnStorage = (await getStorage('tabKillerWhiteList')) || [];
   const newWhiteList = [...whiteListOnStorage, addingUrl];
-  setSyncStorage('tabKillerWhiteList', newWhiteList);
+  setStorage('tabKillerWhiteList', newWhiteList);
 };
 
 const deleteWhiteList = async (buttonElement) => {
@@ -126,9 +126,9 @@ const deleteWhiteList = async (buttonElement) => {
 
   // delete URL on the whitelist and renew storage
   const deleteURL = parent.id;
-  const whiteListOnStorage = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteListOnStorage = (await getStorage('tabKillerWhiteList')) || [];
   const newWhiteList = whiteListOnStorage.filter((url) => url !== deleteURL);
-  setSyncStorage('tabKillerWhiteList', newWhiteList);
+  setStorage('tabKillerWhiteList', newWhiteList);
 };
 
 const allClear = async () => {
@@ -136,6 +136,6 @@ const allClear = async () => {
   const isDelete = confirm(confirmMessage);
 
   if (isDelete) {
-    setSyncStorage('tabKillerWhiteList', []);
+    setStorage('tabKillerWhiteList', []);
   }
 };

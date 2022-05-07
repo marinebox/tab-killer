@@ -9,25 +9,25 @@ import {
 import { initLanguage, setLanguageEventListeners } from './language.js';
 import { setScreenSwitchEventListeners } from './screenSwitch.js';
 import {
-  getSyncStorage,
+  getStorage,
   getTabs,
   getTabsNotInWhiteList,
   keywordChecker,
-  setSyncStorage
+  setStorage
 } from './utils.js';
 import { initWhiteList, setWhiteListEventListeners } from './whitelist.js';
 
 const initKillOverWindow = async () => {
   const isKillOverWindow =
-    (await getSyncStorage('tabKillerIsOverWindows')) || false;
-  setSyncStorage('tabKillerIsOverWindows', isKillOverWindow);
+    (await getStorage('tabKillerIsOverWindows')) || false;
+  setStorage('tabKillerIsOverWindows', isKillOverWindow);
   document.getElementById('target_all_windows').checked = isKillOverWindow;
 };
 
 const setCheckboxEventListener = () => {
   const checkElement = document.getElementById('target_all_windows');
   checkElement.addEventListener('change', async () => {
-    setSyncStorage('tabKillerIsOverWindows', checkElement.checked);
+    setStorage('tabKillerIsOverWindows', checkElement.checked);
   });
 };
 

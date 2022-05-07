@@ -1,7 +1,7 @@
 'use strict';
 
 import { getConfirmMsg } from './language.js';
-import { getLocalStorage, setLocalStorage } from './utils.js';
+import { getStorage, setStorage } from './utils.js';
 
 export const setHistoryEventListeners = () => {
   // make history list when history tab clicked
@@ -15,7 +15,7 @@ export const setHistoryEventListeners = () => {
 };
 
 export const initHistory = async () => {
-  const history = (await getLocalStorage('tabKillerHistory')) || [];
+  const history = (await getStorage('tabKillerHistory')) || [];
 
   const historyListElementUl = document.getElementById('history_list');
   historyListElementUl.innerHTML = '';
@@ -67,7 +67,7 @@ export const initHistory = async () => {
  * @param {Object} newHistoryFactors
  */
 export const addHistory = async (newHistoryFactors) => {
-  const history = (await getLocalStorage('tabKillerHistory')) || [];
+  const history = (await getStorage('tabKillerHistory')) || [];
 
   Object.keys(newHistoryFactors).map((key) => {
     history.push({ url: key, title: newHistoryFactors[key] });
@@ -75,19 +75,19 @@ export const addHistory = async (newHistoryFactors) => {
   while (history.length > 50) {
     history.shift();
   }
-  setLocalStorage('tabKillerHistory', history);
+  setStorage('tabKillerHistory', history);
 };
 
 const deleteHistory = async (index) => {
-  const history = (await getLocalStorage('tabKillerHistory')) || [];
+  const history = (await getStorage('tabKillerHistory')) || [];
   history.splice(index, 1);
-  setLocalStorage('tabKillerHistory', history);
+  setStorage('tabKillerHistory', history);
 };
 
 const allClear = async () => {
   const confirmMessage = await getConfirmMsg('historyAllClearConfirm');
   const isDelete = confirm(confirmMessage);
   if (isDelete) {
-    setLocalStorage('tabKillerHistory', []);
+    setStorage('tabKillerHistory', []);
   }
 };

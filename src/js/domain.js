@@ -4,14 +4,13 @@ import { addHistory } from './history.js';
 import { getConfirmMsg } from './language.js';
 import {
   getAllTabs,
-  getSyncStorage,
+  getStorage,
   getTabsOnActiveWindow,
   getTabsNotInWhiteList
 } from './utils.js';
 
 export const initDomainButton = async () => {
-  const isOverWindows =
-    (await getSyncStorage('tabKillerIsOverWindows')) || false;
+  const isOverWindows = (await getStorage('tabKillerIsOverWindows')) || false;
   const allTabs = isOverWindows
     ? await getAllTabs()
     : await getTabsOnActiveWindow();
@@ -53,7 +52,7 @@ export const initDomainButton = async () => {
 
     document.getElementById(domain).addEventListener('click', async () => {
       const newHistoryFactors = {};
-      const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+      const whiteList = (await getStorage('tabKillerWhiteList')) || [];
 
       let isForceDelete = false;
 
