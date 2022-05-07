@@ -38,6 +38,52 @@ export const getSyncStorage = (key = null) =>
     chrome.storage.sync.get(key, (data) => resolve(data[key]));
   });
 
+const keyMap = {
+  tabKillerHistory: 'local',
+  tabKillerIsOverWindows: 'sync',
+  tabKillerLanguage: 'local',
+  tabKillerWhiteList: 'sync'
+};
+
+/**
+ * @param  {string} key
+ * @param  {Object} value
+ * @return {Promise} sync storage object
+ */
+export const setStorage = (key, value) => {
+  const keyType = keyMap[key];
+  if (keyType === 'local') {
+    return new Promise((resolve) => {
+      chrome.storage.local.set({ [key]: value }, () => resolve());
+    });
+  } else if (keyType === 'sync') {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [key]: value }, () => resolve());
+    });
+  } else {
+    throw new Error(`Unknown key: ${key}`);
+  }
+};
+
+/**
+ * @param  {string} key
+ * @return {Promise} sync storage object
+ */
+export const getStorage = (key = null) => {
+  const keyType = keyMap[key];
+  if (keyType === 'local') {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(key, (data) => resolve(data[key]));
+    });
+  } else if (keyType === 'sync') {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(key, (data) => resolve(data[key]));
+    });
+  } else {
+    throw new Error(`Unknown key: ${key}`);
+  }
+};
+
 /**
  * @return {Promise<Array>} All tabs
  */
