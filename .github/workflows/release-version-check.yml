@@ -1,0 +1,13 @@
+name: Release Version Check
+
+on:
+  push:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
