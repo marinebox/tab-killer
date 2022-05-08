@@ -8,8 +8,8 @@ const keyMap = {
 };
 
 /**
- * @param  {string} key
- * @param  {Object} value
+ * @param  {('tabKillerHistory'|'tabKillerIsOverWindows'|'tabKillerLanguage'|'tabKillerWhiteList')} key a key of chrome.storage
+ * @param  {Object} value a value of chrome.storage
  * @return {Promise} sync storage object
  * @throws {Error} Unknown key is used
  */
@@ -29,7 +29,7 @@ export const setStorage = (key, value) => {
 };
 
 /**
- * @param  {string} key
+ * @param  {('tabKillerHistory'|'tabKillerIsOverWindows'|'tabKillerLanguage'|'tabKillerWhiteList')} [key=null] a key of chrome.storage. Default key is 'null'.
  * @return {Promise} sync storage object
  * @throws {Error} Unknown key is used
  */
