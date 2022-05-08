@@ -11,6 +11,7 @@ const keyMap = {
  * @param  {string} key
  * @param  {Object} value
  * @return {Promise} sync storage object
+ * @throws {Error} Unknown key is used
  */
 export const setStorage = (key, value) => {
   const keyType = keyMap[key];
@@ -30,6 +31,7 @@ export const setStorage = (key, value) => {
 /**
  * @param  {string} key
  * @return {Promise} sync storage object
+ * @throws {Error} Unknown key is used
  */
 export const getStorage = (key = null) => {
   const keyType = keyMap[key];
