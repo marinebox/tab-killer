@@ -2,8 +2,8 @@
 
 import {
   getAppropriateLanguageConfig,
-  getLocalStorage,
-  setLocalStorage
+  getStorage,
+  setStorage
 } from './utils.js';
 
 const translateIdWord = new Map([
@@ -106,7 +106,7 @@ export const translateErrorWord = new Map([
 
 export const initLanguage = async () => {
   const languageConfigOnStorage =
-    (await getLocalStorage('tabKillerLanguage')) || 'auto';
+    (await getStorage('tabKillerLanguage')) || 'auto';
   document
     .getElementById(`lang_${languageConfigOnStorage}`)
     .classList.add('is-active');
@@ -133,7 +133,7 @@ const switchDropdownActiveItems = async (element) => {
   for (const item of items) {
     if (element.id === item.id) {
       const language = item.id.replace('lang_', '');
-      setLocalStorage('tabKillerLanguage', language);
+      setStorage('tabKillerLanguage', language);
     } else {
       item.classList.remove('is-active');
     }

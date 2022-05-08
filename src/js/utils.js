@@ -1,42 +1,52 @@
 'use strict';
 
-/**
- * @param  {string} key
- * @return {Promise} local storage object
- */
-export const getLocalStorage = (key = null) =>
-  new Promise((resolve) => {
-    chrome.storage.local.get(key, (data) => resolve(data[key]));
-  });
+const keyMap = {
+  tabKillerHistory: 'local',
+  tabKillerIsOverWindows: 'sync',
+  tabKillerLanguage: 'local',
+  tabKillerWhiteList: 'sync'
+};
 
 /**
- * @param  {string} key
- * @param  {Object} value
- * @return {Promise} local storage object
- */
-export const setLocalStorage = (key, value) =>
-  new Promise((resolve) => {
-    chrome.storage.local.set({ [key]: value }, () => resolve());
-  });
-
-/**
- * @param  {string} key
- * @param  {Object} value
+ * @param  {('tabKillerHistory'|'tabKillerIsOverWindows'|'tabKillerLanguage'|'tabKillerWhiteList')} key a key of chrome.storage
+ * @param  {Object} value a value of chrome.storage
  * @return {Promise} sync storage object
+ * @throws {Error} Unknown key is used
  */
-export const setSyncStorage = (key, value) =>
-  new Promise((resolve) => {
-    chrome.storage.sync.set({ [key]: value }, () => resolve());
-  });
+export const setStorage = (key, value) => {
+  const keyType = keyMap[key];
+  if (keyType === 'local') {
+    return new Promise((resolve) => {
+      chrome.storage.local.set({ [key]: value }, () => resolve());
+    });
+  } else if (keyType === 'sync') {
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({ [key]: value }, () => resolve());
+    });
+  } else {
+    throw new Error(`Unknown key: ${key}`);
+  }
+};
 
 /**
- * @param  {string} key
+ * @param  {('tabKillerHistory'|'tabKillerIsOverWindows'|'tabKillerLanguage'|'tabKillerWhiteList')} [key=null] a key of chrome.storage. Default key is 'null'.
  * @return {Promise} sync storage object
+ * @throws {Error} Unknown key is used
  */
-export const getSyncStorage = (key = null) =>
-  new Promise((resolve) => {
-    chrome.storage.sync.get(key, (data) => resolve(data[key]));
-  });
+export const getStorage = (key = null) => {
+  const keyType = keyMap[key];
+  if (keyType === 'local') {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(key, (data) => resolve(data[key]));
+    });
+  } else if (keyType === 'sync') {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(key, (data) => resolve(data[key]));
+    });
+  } else {
+    throw new Error(`Unknown key: ${key}`);
+  }
+};
 
 /**
  * @return {Promise<Array>} All tabs
@@ -58,8 +68,7 @@ export const getTabsOnActiveWindow = () =>
  * @return {Promise<Array>} tabs object
  */
 export const getTabs = async () => {
-  const isOverWindows =
-    (await getSyncStorage('tabKillerIsOverWindows')) || false;
+  const isOverWindows = (await getStorage('tabKillerIsOverWindows')) || false;
   const tabs = isOverWindows
     ? await getAllTabs()
     : await getTabsOnActiveWindow();
@@ -85,7 +94,7 @@ export const filterTabsWhichIsNotInWhiteList = (tabs, whiteList) => {
  */
 export const getTabsNotInWhiteList = async () => {
   const tabs = await getTabs();
-  const whiteList = (await getSyncStorage('tabKillerWhiteList')) || [];
+  const whiteList = (await getStorage('tabKillerWhiteList')) || [];
 
   return filterTabsWhichIsNotInWhiteList(tabs, whiteList);
 };
@@ -105,7 +114,7 @@ export const getCurrentTab = () =>
  * @return {Boolean} if keyword is correct, return true, else false
  */
 export const keywordChecker = async (keyword) => {
-  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  const languageConfig = (await getStorage('tabKillerLanguage')) || 'auto';
   const language =
     languageConfig === 'auto' ? chrome.i18n.getUILanguage() : languageConfig;
 
@@ -135,7 +144,7 @@ export const keywordChecker = async (keyword) => {
  * @return {string} if 'ja' used, return 'ja', else 'en'.
  */
 export const getAppropriateLanguageConfig = async () => {
-  const languageConfig = (await getLocalStorage('tabKillerLanguage')) || 'auto';
+  const languageConfig = (await getStorage('tabKillerLanguage')) || 'auto';
   let language = 'en';
   if (languageConfig === 'auto') {
     const UILanguage = chrome.i18n.getUILanguage();
