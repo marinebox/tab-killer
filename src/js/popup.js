@@ -38,7 +38,16 @@ const setDeleteDuplicateTabsEventListener = () => {
       const tabs = await getTabsNotInWhiteList();
 
       tabs.sort((a, b) => {
-        return b.active - a.active;
+        if (b.active > a.active) {
+          return 1;
+        } else if (b.active < a.active) {
+          return -1;
+        } else if (b.index < a.index) {
+          return 1;
+        } else if (b.index > a.index) {
+          return -1;
+        }
+        return 0;
       });
 
       const urlSet = new Set(tabs.map((tab) => tab.url));
